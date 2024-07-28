@@ -14,4 +14,6 @@ Arooooo!!
 - Clone repo locally along with upstream added as remote "upstream".
 - Install Go.
 - Change working directory in terminal to the cloned repo.
-- Build the binary file for a stated platform & arch: `GOOS=linux GOARCH=amd64 ./scripts/build.sh`
+- Build the binary file for a stated platform & arch: `GOOS=linux GOARCH=amd64 ./scripts/build.sh`.
+- I've added some convience additional scripts `build_amd64_linux.sh` & `build_arm64_linux.sh` though so you can just run those instead of the `build.sh` directly with those variables infront.
+- To ensure you have the correct binary generated, use `file` command: `file gotosocial`.
