@@ -37,7 +37,12 @@ type InstancePatchTestSuite struct {
 }
 
 func (suite *InstancePatchTestSuite) instancePatch(fieldName string, fileName string, extraFields map[string][]string) (code int, body []byte) {
-	requestBody, w, err := testrig.CreateMultipartFormData(fieldName, fileName, extraFields)
+	var dataF testrig.DataF
+	if fieldName != "" && fileName != "" {
+		dataF = testrig.FileToDataF(fieldName, fileName)
+	}
+
+	requestBody, w, err := testrig.CreateMultipartFormData(dataF, extraFields)
 	if err != nil {
 		suite.FailNow(err.Error())
 	}
@@ -105,11 +110,26 @@ func (suite *InstancePatchTestSuite) TestInstancePatch1() {
       "supported_mime_types": [
         "image/jpeg",
         "image/gif",
-        "image/png",
         "image/webp",
-        "video/mp4"
+        "audio/mp2",
+        "audio/mp3",
+        "video/x-msvideo",
+        "audio/flac",
+        "audio/x-flac",
+        "image/png",
+        "image/apng",
+        "audio/ogg",
+        "video/ogg",
+        "audio/x-m4a",
+        "video/mp4",
+        "video/quicktime",
+        "audio/x-ms-wma",
+        "video/x-ms-wmv",
+        "video/webm",
+        "audio/x-matroska",
+        "video/x-matroska"
       ],
-      "image_size_limit": 10485760,
+      "image_size_limit": 41943040,
       "image_matrix_limit": 16777216,
       "video_size_limit": 41943040,
       "video_frame_rate_limit": 60,
@@ -135,10 +155,10 @@ func (suite *InstancePatchTestSuite) TestInstancePatch1() {
   },
   "stats": {
     "domain_count": 2,
-    "status_count": 19,
+    "status_count": 20,
     "user_count": 4
   },
-  "thumbnail": "http://localhost:8080/assets/logo.png",
+  "thumbnail": "http://localhost:8080/assets/logo.webp",
   "contact_account": {
     "id": "01F8MH17FWEB39HZJ76B6VXSKF",
     "username": "admin",
@@ -152,8 +172,8 @@ func (suite *InstancePatchTestSuite) TestInstancePatch1() {
     "url": "http://localhost:8080/@admin",
     "avatar": "",
     "avatar_static": "",
-    "header": "http://localhost:8080/assets/default_header.png",
-    "header_static": "http://localhost:8080/assets/default_header.png",
+    "header": "http://localhost:8080/assets/default_header.webp",
+    "header_static": "http://localhost:8080/assets/default_header.webp",
     "followers_count": 1,
     "following_count": 1,
     "statuses_count": 4,
@@ -161,9 +181,13 @@ func (suite *InstancePatchTestSuite) TestInstancePatch1() {
     "emojis": [],
     "fields": [],
     "enable_rss": true,
-    "role": {
-      "name": "admin"
-    }
+    "roles": [
+      {
+        "id": "admin",
+        "name": "admin",
+        "color": ""
+      }
+    ]
   },
   "max_toot_chars": 5000,
   "rules": [
@@ -226,11 +250,26 @@ func (suite *InstancePatchTestSuite) TestInstancePatch2() {
       "supported_mime_types": [
         "image/jpeg",
         "image/gif",
-        "image/png",
         "image/webp",
-        "video/mp4"
+        "audio/mp2",
+        "audio/mp3",
+        "video/x-msvideo",
+        "audio/flac",
+        "audio/x-flac",
+        "image/png",
+        "image/apng",
+        "audio/ogg",
+        "video/ogg",
+        "audio/x-m4a",
+        "video/mp4",
+        "video/quicktime",
+        "audio/x-ms-wma",
+        "video/x-ms-wmv",
+        "video/webm",
+        "audio/x-matroska",
+        "video/x-matroska"
       ],
-      "image_size_limit": 10485760,
+      "image_size_limit": 41943040,
       "image_matrix_limit": 16777216,
       "video_size_limit": 41943040,
       "video_frame_rate_limit": 60,
@@ -256,10 +295,10 @@ func (suite *InstancePatchTestSuite) TestInstancePatch2() {
   },
   "stats": {
     "domain_count": 2,
-    "status_count": 19,
+    "status_count": 20,
     "user_count": 4
   },
-  "thumbnail": "http://localhost:8080/assets/logo.png",
+  "thumbnail": "http://localhost:8080/assets/logo.webp",
   "contact_account": {
     "id": "01F8MH17FWEB39HZJ76B6VXSKF",
     "username": "admin",
@@ -273,8 +312,8 @@ func (suite *InstancePatchTestSuite) TestInstancePatch2() {
     "url": "http://localhost:8080/@admin",
     "avatar": "",
     "avatar_static": "",
-    "header": "http://localhost:8080/assets/default_header.png",
-    "header_static": "http://localhost:8080/assets/default_header.png",
+    "header": "http://localhost:8080/assets/default_header.webp",
+    "header_static": "http://localhost:8080/assets/default_header.webp",
     "followers_count": 1,
     "following_count": 1,
     "statuses_count": 4,
@@ -282,9 +321,13 @@ func (suite *InstancePatchTestSuite) TestInstancePatch2() {
     "emojis": [],
     "fields": [],
     "enable_rss": true,
-    "role": {
-      "name": "admin"
-    }
+    "roles": [
+      {
+        "id": "admin",
+        "name": "admin",
+        "color": ""
+      }
+    ]
   },
   "max_toot_chars": 5000,
   "rules": [
@@ -347,11 +390,26 @@ func (suite *InstancePatchTestSuite) TestInstancePatch3() {
       "supported_mime_types": [
         "image/jpeg",
         "image/gif",
-        "image/png",
         "image/webp",
-        "video/mp4"
+        "audio/mp2",
+        "audio/mp3",
+        "video/x-msvideo",
+        "audio/flac",
+        "audio/x-flac",
+        "image/png",
+        "image/apng",
+        "audio/ogg",
+        "video/ogg",
+        "audio/x-m4a",
+        "video/mp4",
+        "video/quicktime",
+        "audio/x-ms-wma",
+        "video/x-ms-wmv",
+        "video/webm",
+        "audio/x-matroska",
+        "video/x-matroska"
       ],
-      "image_size_limit": 10485760,
+      "image_size_limit": 41943040,
       "image_matrix_limit": 16777216,
       "video_size_limit": 41943040,
       "video_frame_rate_limit": 60,
@@ -377,10 +435,10 @@ func (suite *InstancePatchTestSuite) TestInstancePatch3() {
   },
   "stats": {
     "domain_count": 2,
-    "status_count": 19,
+    "status_count": 20,
     "user_count": 4
   },
-  "thumbnail": "http://localhost:8080/assets/logo.png",
+  "thumbnail": "http://localhost:8080/assets/logo.webp",
   "contact_account": {
     "id": "01F8MH17FWEB39HZJ76B6VXSKF",
     "username": "admin",
@@ -394,8 +452,8 @@ func (suite *InstancePatchTestSuite) TestInstancePatch3() {
     "url": "http://localhost:8080/@admin",
     "avatar": "",
     "avatar_static": "",
-    "header": "http://localhost:8080/assets/default_header.png",
-    "header_static": "http://localhost:8080/assets/default_header.png",
+    "header": "http://localhost:8080/assets/default_header.webp",
+    "header_static": "http://localhost:8080/assets/default_header.webp",
     "followers_count": 1,
     "following_count": 1,
     "statuses_count": 4,
@@ -403,9 +461,13 @@ func (suite *InstancePatchTestSuite) TestInstancePatch3() {
     "emojis": [],
     "fields": [],
     "enable_rss": true,
-    "role": {
-      "name": "admin"
-    }
+    "roles": [
+      {
+        "id": "admin",
+        "name": "admin",
+        "color": ""
+      }
+    ]
   },
   "max_toot_chars": 5000,
   "rules": [
@@ -442,7 +504,7 @@ func (suite *InstancePatchTestSuite) TestInstancePatch4() {
 
 func (suite *InstancePatchTestSuite) TestInstancePatch5() {
 	requestBody, w, err := testrig.CreateMultipartFormData(
-		"", "",
+		nil,
 		map[string][]string{
 			"short_description": {"<p>This is some html, which is <em>allowed</em> in short descriptions.</p>"},
 		})
@@ -519,11 +581,26 @@ func (suite *InstancePatchTestSuite) TestInstancePatch6() {
       "supported_mime_types": [
         "image/jpeg",
         "image/gif",
-        "image/png",
         "image/webp",
-        "video/mp4"
+        "audio/mp2",
+        "audio/mp3",
+        "video/x-msvideo",
+        "audio/flac",
+        "audio/x-flac",
+        "image/png",
+        "image/apng",
+        "audio/ogg",
+        "video/ogg",
+        "audio/x-m4a",
+        "video/mp4",
+        "video/quicktime",
+        "audio/x-ms-wma",
+        "video/x-ms-wmv",
+        "video/webm",
+        "audio/x-matroska",
+        "video/x-matroska"
       ],
-      "image_size_limit": 10485760,
+      "image_size_limit": 41943040,
       "image_matrix_limit": 16777216,
       "video_size_limit": 41943040,
       "video_frame_rate_limit": 60,
@@ -549,10 +626,10 @@ func (suite *InstancePatchTestSuite) TestInstancePatch6() {
   },
   "stats": {
     "domain_count": 2,
-    "status_count": 19,
+    "status_count": 20,
     "user_count": 4
   },
-  "thumbnail": "http://localhost:8080/assets/logo.png",
+  "thumbnail": "http://localhost:8080/assets/logo.webp",
   "contact_account": {
     "id": "01F8MH17FWEB39HZJ76B6VXSKF",
     "username": "admin",
@@ -566,8 +643,8 @@ func (suite *InstancePatchTestSuite) TestInstancePatch6() {
     "url": "http://localhost:8080/@admin",
     "avatar": "",
     "avatar_static": "",
-    "header": "http://localhost:8080/assets/default_header.png",
-    "header_static": "http://localhost:8080/assets/default_header.png",
+    "header": "http://localhost:8080/assets/default_header.webp",
+    "header_static": "http://localhost:8080/assets/default_header.webp",
     "followers_count": 1,
     "following_count": 1,
     "statuses_count": 4,
@@ -575,9 +652,13 @@ func (suite *InstancePatchTestSuite) TestInstancePatch6() {
     "emojis": [],
     "fields": [],
     "enable_rss": true,
-    "role": {
-      "name": "admin"
-    }
+    "roles": [
+      {
+        "id": "admin",
+        "name": "admin",
+        "color": ""
+      }
+    ]
   },
   "max_toot_chars": 5000,
   "rules": [
@@ -662,11 +743,26 @@ func (suite *InstancePatchTestSuite) TestInstancePatch8() {
       "supported_mime_types": [
         "image/jpeg",
         "image/gif",
-        "image/png",
         "image/webp",
-        "video/mp4"
+        "audio/mp2",
+        "audio/mp3",
+        "video/x-msvideo",
+        "audio/flac",
+        "audio/x-flac",
+        "image/png",
+        "image/apng",
+        "audio/ogg",
+        "video/ogg",
+        "audio/x-m4a",
+        "video/mp4",
+        "video/quicktime",
+        "audio/x-ms-wma",
+        "video/x-ms-wmv",
+        "video/webm",
+        "audio/x-matroska",
+        "video/x-matroska"
       ],
-      "image_size_limit": 10485760,
+      "image_size_limit": 41943040,
       "image_matrix_limit": 16777216,
       "video_size_limit": 41943040,
       "video_frame_rate_limit": 60,
@@ -692,11 +788,13 @@ func (suite *InstancePatchTestSuite) TestInstancePatch8() {
   },
   "stats": {
     "domain_count": 2,
-    "status_count": 19,
+    "status_count": 20,
     "user_count": 4
   },
   "thumbnail": "http://localhost:8080/fileserver/01AY6P665V14JJR0AFVRT7311Y/attachment/original/`+instanceAccount.AvatarMediaAttachment.ID+`.gif",`+`
   "thumbnail_type": "image/gif",
+  "thumbnail_static": "http://localhost:8080/fileserver/01AY6P665V14JJR0AFVRT7311Y/attachment/small/`+instanceAccount.AvatarMediaAttachment.ID+`.webp",`+`
+  "thumbnail_static_type": "image/webp",
   "thumbnail_description": "A bouncing little green peglin.",
   "contact_account": {
     "id": "01F8MH17FWEB39HZJ76B6VXSKF",
@@ -711,8 +809,8 @@ func (suite *InstancePatchTestSuite) TestInstancePatch8() {
     "url": "http://localhost:8080/@admin",
     "avatar": "",
     "avatar_static": "",
-    "header": "http://localhost:8080/assets/default_header.png",
-    "header_static": "http://localhost:8080/assets/default_header.png",
+    "header": "http://localhost:8080/assets/default_header.webp",
+    "header_static": "http://localhost:8080/assets/default_header.webp",
     "followers_count": 1,
     "following_count": 1,
     "statuses_count": 4,
@@ -720,9 +818,13 @@ func (suite *InstancePatchTestSuite) TestInstancePatch8() {
     "emojis": [],
     "fields": [],
     "enable_rss": true,
-    "role": {
-      "name": "admin"
-    }
+    "roles": [
+      {
+        "id": "admin",
+        "name": "admin",
+        "color": ""
+      }
+    ]
   },
   "max_toot_chars": 5000,
   "rules": [
@@ -753,8 +855,10 @@ func (suite *InstancePatchTestSuite) TestInstancePatch8() {
 	suite.Equal(`{
   "url": "http://localhost:8080/fileserver/01AY6P665V14JJR0AFVRT7311Y/attachment/original/`+instanceAccount.AvatarMediaAttachment.ID+`.gif",`+`
   "thumbnail_type": "image/gif",
+  "static_url": "http://localhost:8080/fileserver/01AY6P665V14JJR0AFVRT7311Y/attachment/small/`+instanceAccount.AvatarMediaAttachment.ID+`.webp",`+`
+  "thumbnail_static_type": "image/webp",
   "thumbnail_description": "A bouncing little green peglin.",
-  "blurhash": "LG9t;qRS4YtO.4WDRlt5IXoxtPj["
+  "blurhash": "LE9801Rl4Yt5%dWCV]t5Dmoex?WC"
 }`, string(instanceV2ThumbnailJson))
 
 	// double extra special bonus: now update the image description without changing the image
@@ -820,11 +924,26 @@ func (suite *InstancePatchTestSuite) TestInstancePatch9() {
       "supported_mime_types": [
         "image/jpeg",
         "image/gif",
-        "image/png",
         "image/webp",
-        "video/mp4"
+        "audio/mp2",
+        "audio/mp3",
+        "video/x-msvideo",
+        "audio/flac",
+        "audio/x-flac",
+        "image/png",
+        "image/apng",
+        "audio/ogg",
+        "video/ogg",
+        "audio/x-m4a",
+        "video/mp4",
+        "video/quicktime",
+        "audio/x-ms-wma",
+        "video/x-ms-wmv",
+        "video/webm",
+        "audio/x-matroska",
+        "video/x-matroska"
       ],
-      "image_size_limit": 10485760,
+      "image_size_limit": 41943040,
       "image_matrix_limit": 16777216,
       "video_size_limit": 41943040,
       "video_frame_rate_limit": 60,
@@ -850,10 +969,10 @@ func (suite *InstancePatchTestSuite) TestInstancePatch9() {
   },
   "stats": {
     "domain_count": 2,
-    "status_count": 19,
+    "status_count": 20,
     "user_count": 4
   },
-  "thumbnail": "http://localhost:8080/assets/logo.png",
+  "thumbnail": "http://localhost:8080/assets/logo.webp",
   "contact_account": {
     "id": "01F8MH17FWEB39HZJ76B6VXSKF",
     "username": "admin",
@@ -867,8 +986,8 @@ func (suite *InstancePatchTestSuite) TestInstancePatch9() {
     "url": "http://localhost:8080/@admin",
     "avatar": "",
     "avatar_static": "",
-    "header": "http://localhost:8080/assets/default_header.png",
-    "header_static": "http://localhost:8080/assets/default_header.png",
+    "header": "http://localhost:8080/assets/default_header.webp",
+    "header_static": "http://localhost:8080/assets/default_header.webp",
     "followers_count": 1,
     "following_count": 1,
     "statuses_count": 4,
@@ -876,9 +995,13 @@ func (suite *InstancePatchTestSuite) TestInstancePatch9() {
     "emojis": [],
     "fields": [],
     "enable_rss": true,
-    "role": {
-      "name": "admin"
-    }
+    "roles": [
+      {
+        "id": "admin",
+        "name": "admin",
+        "color": ""
+      }
+    ]
   },
   "max_toot_chars": 5000,
   "rules": [

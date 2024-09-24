@@ -82,18 +82,37 @@
 		margin-top: calc(-1 * $overlap);
 		gap: 0 1rem;
 
-		.avatar {
+		.avatar-image-wrapper {
 			grid-area: avatar;
-			height: $avatar-size;
-			width: $avatar-size;
+			
 			border: 0.2rem solid $avatar-border;
 			border-radius: $br;
-			overflow: hidden; /* prevents image extending beyond rounded borders */
+			
+			/*
+				Wrapper always same
+				size + proportions no
+				matter image inside.
+			*/
+			height: $avatar-size;
+			width: $avatar-size;
 
-			img {
+			.avatar {
+				/*
+					Fit 100% of the wrapper.
+				*/
 				height: 100%;
 				width: 100%;
+
+				/*
+					Normalize non-square images.
+				*/
 				object-fit: cover;
+
+				/*
+					Prevent image extending
+					beyond rounded borders.
+				*/
+				border-radius: $br-inner;
 			}
 		}
 
@@ -103,7 +122,7 @@
 			display: grid;
 			gap: 0 1rem;
 			box-sizing: border-box;
-			grid-template-columns: auto 1fr;
+			grid-template-columns: 1fr auto;
 			grid-template-rows: $name-size auto;
 			grid-template-areas:
 				"displayname displayname"
@@ -115,16 +134,47 @@
 				font-size: 1.5rem;
 				font-weight: bold;
 			}
-	
-			.username {
-				min-width: 0;
+
+			.bot-username-wrapper {
+				display: flex;
+				gap: 0.5rem;
 				grid-area: username;
-				line-height: $username-size;
-	
-				font-size: 1rem;
-				font-weight: bold;
-				color: $fg-accent;
-				user-select: all;
+				align-items: center;
+				
+				.bot-legend-wrapper {
+					display: flex;
+					gap: 0.25rem;
+					align-items: center;
+					
+					background: $bg;
+					color: $fg;
+		
+					border-radius: $br;
+					padding: 0.1rem 0.4rem 0.2rem 0.4rem;
+					
+					font-variant: small-caps;
+					font-weight: bold;
+
+					cursor: default;
+
+					.bot-icon {
+						/*
+							FA icon is weirdly
+							aligned so tweak it
+						*/
+						margin-top: 0.25rem;
+					}
+				}
+
+				.username {
+					min-width: 0;
+					line-height: $username-size;
+		
+					font-size: 1rem;
+					font-weight: bold;
+					color: $fg-accent;
+					user-select: all;
+				}
 			}
 	
 			.role {
@@ -157,6 +207,9 @@
 	}
 }
 
+/*
+	Tablet-ish-kinda size.
+*/
 @media screen and (max-width: 750px) {
 	.profile .profile-header {
 		.basic-info {
@@ -167,17 +220,52 @@
 				"namerole namerole"
 				"namerole namerole";
 			
+			/*
+				Make display name a bit smaller
+				so there's more chance of being
+				able to read everything.
+			*/
 			.namerole {
-				grid-template-columns: 1fr;
-				grid-template-rows: $name-size auto;
-				grid-template-areas:
-					"displayname displayname"
-					"username role";
-				
 				.displayname {
-					font-size: 1.4rem;
+					font-size: 1.2rem;
+					line-height: 2rem;
+					margin-top: 0.5rem;
 				}
 			}
+		}
+	}
+}
+
+/*
+	Phone-ish-kinda size.
+*/
+@media screen and (max-width: 500px) {
+	.profile
+	.profile-header
+	.basic-info
+	.namerole {
+		/*
+			Line up in smallest possible
+			horizontal space to avoid overflow.
+		*/
+		display: flex;
+		flex-direction: column;
+		gap: 0.5rem;
+
+		/*
+			Don't hug the right anymore
+			(good life advice in general).
+		*/
+		.role {
+			align-self: flex-start;
+		}
+
+		/*
+			Allow this to wrap in case
+			of a really skinny screen.
+		*/
+		.bot-username-wrapper {
+			flex-wrap: wrap;
 		}
 	}
 }

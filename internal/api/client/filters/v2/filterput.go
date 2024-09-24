@@ -121,6 +121,17 @@ import (
 //
 //			Sample: 86400
 //		type: number
+//	-
+//		name: filter_action
+//		in: formData
+//		description: |-
+//			The action to be taken when a status matches this filter.
+//
+//			Sample: warn
+//		type: string
+//		enum:
+//			- warn
+//			- hide
 //
 //	security:
 //	- OAuth2 Bearer:
@@ -289,7 +300,7 @@ func validateNormalizeUpdateFilter(form *apimodel.FilterUpdateRequestV2) error {
 			}
 		}
 
-		destroy := util.PtrValueOr(formKeyword.Destroy, false)
+		destroy := util.PtrOrValue(formKeyword.Destroy, false)
 		form.Keywords[i].Destroy = &destroy
 
 		if destroy && formKeyword.ID == nil {
@@ -305,7 +316,7 @@ func validateNormalizeUpdateFilter(form *apimodel.FilterUpdateRequestV2) error {
 			}
 		}
 
-		destroy := util.PtrValueOr(formStatus.Destroy, false)
+		destroy := util.PtrOrValue(formStatus.Destroy, false)
 		form.Statuses[i].Destroy = &destroy
 
 		switch {

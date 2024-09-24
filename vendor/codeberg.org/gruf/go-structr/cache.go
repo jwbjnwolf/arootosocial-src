@@ -20,17 +20,6 @@ func DefaultIgnoreErr(err error) bool {
 // for initializing a struct cache.
 type CacheConfig[StructType any] struct {
 
-	// Indices defines indices to create
-	// in the Cache for the receiving
-	// generic struct type parameter.
-	Indices []IndexConfig
-
-	// MaxSize defines the maximum number
-	// of items allowed in the Cache at
-	// one time, before old items start
-	// getting evicted.
-	MaxSize int
-
 	// IgnoreErr defines which errors to
 	// ignore (i.e. not cache) returned
 	// from load function callback calls.
@@ -48,6 +37,17 @@ type CacheConfig[StructType any] struct {
 	// as the values passed to Put() / Store(),
 	// or by the keys by calls to Invalidate().
 	Invalidate func(StructType)
+
+	// Indices defines indices to create
+	// in the Cache for the receiving
+	// generic struct type parameter.
+	Indices []IndexConfig
+
+	// MaxSize defines the maximum number
+	// of items allowed in the Cache at
+	// one time, before old items start
+	// getting evicted.
+	MaxSize int
 }
 
 // Cache provides a structure cache with automated
@@ -56,23 +56,23 @@ type CacheConfig[StructType any] struct {
 // of negative results (errors!) returned by LoadOne().
 type Cache[StructType any] struct {
 
-	// indices used in storing passed struct
-	// types by user defined sets of fields.
-	indices []Index
+	// hook functions.
+	ignore  func(error) bool
+	copy    func(StructType) StructType
+	invalid func(StructType)
 
 	// keeps track of all indexed items,
 	// in order of last recently used (LRU).
 	lru list
 
+	// indices used in storing passed struct
+	// types by user defined sets of fields.
+	indices []Index
+
 	// max cache size, imposes size
 	// limit on the lruList in order
 	// to evict old entries.
 	maxSize int
-
-	// hook functions.
-	ignore  func(error) bool
-	copy    func(StructType) StructType
-	invalid func(StructType)
 
 	// protective mutex, guards:
 	// - Cache{}.lruList
@@ -194,8 +194,7 @@ func (c *Cache[T]) Put(values ...T) {
 	// Store all passed values.
 	for i := range values {
 		c.store_value(
-			nil,
-			Key{},
+			nil, "",
 			values[i],
 		)
 	}
@@ -302,9 +301,9 @@ func (c *Cache[T]) LoadOne(index *Index, key Key, load func() (T, error)) (T, er
 	// the provided value, so it is
 	// safe for us to return as-is.
 	if err != nil {
-		c.store_error(index, key, err)
+		c.store_error(index, key.key, err)
 	} else {
-		c.store_value(index, key, val)
+		c.store_value(index, key.key, val)
 	}
 
 	// Done with lock.
@@ -376,6 +375,11 @@ func (c *Cache[T]) Load(index *Index, keys []Key, load func([]Key) ([]T, error))
 	// the lock.
 	unlock()
 
+	if len(keys) == 0 {
+		// We loaded everything!
+		return values, nil
+	}
+
 	// Load uncached values.
 	uncached, err := load(keys)
 	if err != nil {
@@ -388,8 +392,7 @@ func (c *Cache[T]) Load(index *Index, keys []Key, load func([]Key) ([]T, error))
 	// Store all uncached values.
 	for i := range uncached {
 		c.store_value(
-			nil,
-			Key{},
+			nil, "",
 			uncached[i],
 		)
 	}
@@ -511,6 +514,11 @@ func (c *Cache[T]) Trim(perc float64) {
 		c.delete(item)
 	}
 
+	// Compact index data stores.
+	for i := range c.indices {
+		c.indices[i].data.Compact()
+	}
+
 	// Done with lock.
 	c.mutex.Unlock()
 }
@@ -535,10 +543,9 @@ func (c *Cache[T]) Debug() map[string]any {
 	m["indices"] = indices
 	for i := range c.indices {
 		var n uint64
-		c.indices[i].data.Iter(func(_ string, l *list) (stop bool) {
+		for _, l := range c.indices[i].data.m {
 			n += uint64(l.len)
-			return
-		})
+		}
 		indices[c.indices[i].name] = n
 	}
 	c.mutex.Unlock()
@@ -553,7 +560,7 @@ func (c *Cache[T]) Cap() int {
 	return m
 }
 
-func (c *Cache[T]) store_value(index *Index, key Key, value T) {
+func (c *Cache[T]) store_value(index *Index, key string, value T) {
 	// Alloc new index item.
 	item := new_indexed_item()
 	if cap(item.indexed) < len(c.indices) {
@@ -569,7 +576,7 @@ func (c *Cache[T]) store_value(index *Index, key Key, value T) {
 
 	if index != nil {
 		// Append item to index.
-		index.append(key.key, item)
+		index.append(key, item)
 	}
 
 	// Get ptr to value data.
@@ -619,7 +626,7 @@ func (c *Cache[T]) store_value(index *Index, key Key, value T) {
 	}
 }
 
-func (c *Cache[T]) store_error(index *Index, key Key, err error) {
+func (c *Cache[T]) store_error(index *Index, key string, err error) {
 	if index == nil {
 		// nothing we
 		// can do here.
@@ -639,7 +646,7 @@ func (c *Cache[T]) store_error(index *Index, key Key, err error) {
 	item.data = err
 
 	// Append item to index.
-	index.append(key.key, item)
+	index.append(key, item)
 
 	// Add item to main lru list.
 	c.lru.push_front(&item.elem)

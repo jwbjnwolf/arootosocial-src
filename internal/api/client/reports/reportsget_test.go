@@ -29,6 +29,7 @@ import (
 	"github.com/stretchr/testify/suite"
 	"github.com/superseriousbusiness/gotosocial/internal/api/client/reports"
 	apimodel "github.com/superseriousbusiness/gotosocial/internal/api/model"
+	apiutil "github.com/superseriousbusiness/gotosocial/internal/api/util"
 	"github.com/superseriousbusiness/gotosocial/internal/config"
 	"github.com/superseriousbusiness/gotosocial/internal/gtsmodel"
 	"github.com/superseriousbusiness/gotosocial/internal/oauth"
@@ -61,21 +62,21 @@ func (suite *ReportsGetTestSuite) getReports(
 	ctx.Set(oauth.SessionAuthorizedUser, user)
 
 	// create the request URI
-	requestPath := reports.BasePath + "?" + reports.LimitKey + "=" + strconv.Itoa(limit)
+	requestPath := reports.BasePath + "?" + apiutil.LimitKey + "=" + strconv.Itoa(limit)
 	if resolved != nil {
-		requestPath = requestPath + "&" + reports.ResolvedKey + "=" + strconv.FormatBool(*resolved)
+		requestPath = requestPath + "&" + apiutil.ResolvedKey + "=" + strconv.FormatBool(*resolved)
 	}
 	if targetAccountID != "" {
-		requestPath = requestPath + "&" + reports.TargetAccountIDKey + "=" + targetAccountID
+		requestPath = requestPath + "&" + apiutil.TargetAccountIDKey + "=" + targetAccountID
 	}
 	if maxID != "" {
-		requestPath = requestPath + "&" + reports.MaxIDKey + "=" + maxID
+		requestPath = requestPath + "&" + apiutil.MaxIDKey + "=" + maxID
 	}
 	if sinceID != "" {
-		requestPath = requestPath + "&" + reports.SinceIDKey + "=" + sinceID
+		requestPath = requestPath + "&" + apiutil.SinceIDKey + "=" + sinceID
 	}
 	if minID != "" {
-		requestPath = requestPath + "&" + reports.MinIDKey + "=" + minID
+		requestPath = requestPath + "&" + apiutil.MinIDKey + "=" + minID
 	}
 	baseURI := config.GetProtocol() + "://" + config.GetHost()
 	requestURI := baseURI + "/api/" + requestPath
@@ -150,8 +151,8 @@ func (suite *ReportsGetTestSuite) TestGetReports() {
       "url": "http://fossbros-anonymous.io/@foss_satan",
       "avatar": "",
       "avatar_static": "",
-      "header": "http://localhost:8080/assets/default_header.png",
-      "header_static": "http://localhost:8080/assets/default_header.png",
+      "header": "http://localhost:8080/assets/default_header.webp",
+      "header_static": "http://localhost:8080/assets/default_header.webp",
       "followers_count": 0,
       "following_count": 0,
       "statuses_count": 3,
@@ -240,8 +241,8 @@ func (suite *ReportsGetTestSuite) TestGetReports4() {
       "url": "http://fossbros-anonymous.io/@foss_satan",
       "avatar": "",
       "avatar_static": "",
-      "header": "http://localhost:8080/assets/default_header.png",
-      "header_static": "http://localhost:8080/assets/default_header.png",
+      "header": "http://localhost:8080/assets/default_header.webp",
+      "header_static": "http://localhost:8080/assets/default_header.webp",
       "followers_count": 0,
       "following_count": 0,
       "statuses_count": 3,
@@ -314,8 +315,8 @@ func (suite *ReportsGetTestSuite) TestGetReports6() {
       "url": "http://fossbros-anonymous.io/@foss_satan",
       "avatar": "",
       "avatar_static": "",
-      "header": "http://localhost:8080/assets/default_header.png",
-      "header_static": "http://localhost:8080/assets/default_header.png",
+      "header": "http://localhost:8080/assets/default_header.webp",
+      "header_static": "http://localhost:8080/assets/default_header.webp",
       "followers_count": 0,
       "following_count": 0,
       "statuses_count": 3,
@@ -372,8 +373,8 @@ func (suite *ReportsGetTestSuite) TestGetReports7() {
       "url": "http://fossbros-anonymous.io/@foss_satan",
       "avatar": "",
       "avatar_static": "",
-      "header": "http://localhost:8080/assets/default_header.png",
-      "header_static": "http://localhost:8080/assets/default_header.png",
+      "header": "http://localhost:8080/assets/default_header.webp",
+      "header_static": "http://localhost:8080/assets/default_header.webp",
       "followers_count": 0,
       "following_count": 0,
       "statuses_count": 3,

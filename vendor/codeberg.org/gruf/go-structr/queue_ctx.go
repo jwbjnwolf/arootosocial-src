@@ -6,8 +6,8 @@ import (
 
 // QueueCtx is a context-aware form of Queue{}.
 type QueueCtx[StructType any] struct {
-	Queue[StructType]
 	ch chan struct{}
+	Queue[StructType]
 }
 
 // PopFront pops the current value at front of the queue, else blocking on ctx.
@@ -73,10 +73,9 @@ func (q *QueueCtx[T]) Debug() map[string]any {
 	m["indices"] = indices
 	for i := range q.indices {
 		var n uint64
-		q.indices[i].data.Iter(func(_ string, l *list) (stop bool) {
+		for _, l := range q.indices[i].data.m {
 			n += uint64(l.len)
-			return
-		})
+		}
 		indices[q.indices[i].name] = n
 	}
 	q.mutex.Unlock()

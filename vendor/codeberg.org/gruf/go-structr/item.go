@@ -10,12 +10,12 @@ type indexed_item struct {
 	// is stored in a main list.
 	elem list_elem
 
+	// cached data with type.
+	data interface{}
+
 	// indexed stores the indices
 	// this item is stored under.
 	indexed []*index_entry
-
-	// cached data with type.
-	data interface{}
 }
 
 var indexed_item_pool sync.Pool
@@ -41,7 +41,6 @@ func free_indexed_item(item *indexed_item) {
 }
 
 // drop_index will drop the given index entry from item's indexed.
-// note this also handles freeing the index_entry memory (e.g. to pool)
 func (i *indexed_item) drop_index(entry *index_entry) {
 	for x := 0; x < len(i.indexed); x++ {
 		if i.indexed[x] != entry {

@@ -26,12 +26,15 @@ const (
 type DB interface {
 	Account
 	Admin
+	AdvancedMigration
 	Application
 	Basic
+	Conversation
 	Domain
 	Emoji
 	HeaderFilter
 	Instance
+	Interaction
 	Filter
 	List
 	Marker
@@ -45,6 +48,7 @@ type DB interface {
 	Rule
 	Search
 	Session
+	SinBinStatus
 	Status
 	StatusBookmark
 	StatusFave
@@ -53,4 +57,5 @@ type DB interface {
 	Timeline
 	User
 	Tombstone
+	WorkerTask
 }

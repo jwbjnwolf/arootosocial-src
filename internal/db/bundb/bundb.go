@@ -54,12 +54,15 @@ import (
 type DBService struct {
 	db.Account
 	db.Admin
+	db.AdvancedMigration
 	db.Application
 	db.Basic
+	db.Conversation
 	db.Domain
 	db.Emoji
 	db.HeaderFilter
 	db.Instance
+	db.Interaction
 	db.Filter
 	db.List
 	db.Marker
@@ -73,6 +76,7 @@ type DBService struct {
 	db.Rule
 	db.Search
 	db.Session
+	db.SinBinStatus
 	db.Status
 	db.StatusBookmark
 	db.StatusFave
@@ -81,6 +85,7 @@ type DBService struct {
 	db.Timeline
 	db.User
 	db.Tombstone
+	db.WorkerTask
 	db *bun.DB
 }
 
@@ -157,6 +162,7 @@ func NewBunDBService(ctx context.Context, state *state.State) (db.DB, error) {
 	// https://bun.uptrace.dev/orm/many-to-many-relation/
 	for _, t := range []interface{}{
 		&gtsmodel.AccountToEmoji{},
+		&gtsmodel.ConversationToStatus{},
 		&gtsmodel.StatusToEmoji{},
 		&gtsmodel.StatusToTag{},
 		&gtsmodel.ThreadToStatus{},
@@ -180,12 +186,20 @@ func NewBunDBService(ctx context.Context, state *state.State) (db.DB, error) {
 			db:    db,
 			state: state,
 		},
+		AdvancedMigration: &advancedMigrationDB{
+			db:    db,
+			state: state,
+		},
 		Application: &applicationDB{
 			db:    db,
 			state: state,
 		},
 		Basic: &basicDB{
 			db: db,
+		},
+		Conversation: &conversationDB{
+			db:    db,
+			state: state,
 		},
 		Domain: &domainDB{
 			db:    db,
@@ -200,6 +214,10 @@ func NewBunDBService(ctx context.Context, state *state.State) (db.DB, error) {
 			state: state,
 		},
 		Instance: &instanceDB{
+			db:    db,
+			state: state,
+		},
+		Interaction: &interactionDB{
 			db:    db,
 			state: state,
 		},
@@ -254,6 +272,10 @@ func NewBunDBService(ctx context.Context, state *state.State) (db.DB, error) {
 		Session: &sessionDB{
 			db: db,
 		},
+		SinBinStatus: &sinBinStatusDB{
+			db:    db,
+			state: state,
+		},
 		Status: &statusDB{
 			db:    db,
 			state: state,
@@ -285,6 +307,9 @@ func NewBunDBService(ctx context.Context, state *state.State) (db.DB, error) {
 		Tombstone: &tombstoneDB{
 			db:    db,
 			state: state,
+		},
+		WorkerTask: &workerTaskDB{
+			db: db,
 		},
 		db: db,
 	}
@@ -332,7 +357,7 @@ func sqliteConn(ctx context.Context) (*bun.DB, error) {
 	}
 
 	// Build SQLite connection address with prefs.
-	address = buildSQLiteAddress(address)
+	address, inMem := buildSQLiteAddress(address)
 
 	// Open new DB instance
 	sqldb, err := sql.Open("sqlite-gts", address)
@@ -345,7 +370,13 @@ func sqliteConn(ctx context.Context) (*bun.DB, error) {
 	// - https://www.alexedwards.net/blog/configuring-sqldb
 	sqldb.SetMaxOpenConns(maxOpenConns()) // x number of conns per CPU
 	sqldb.SetMaxIdleConns(1)              // only keep max 1 idle connection around
-	sqldb.SetConnMaxLifetime(0)           // don't kill connections due to age
+	if inMem {
+		log.Warn(nil, "using sqlite in-memory mode; all data will be deleted when gts shuts down; this mode should only be used for debugging or running tests")
+		// Don't close aged connections as this may wipe the DB.
+		sqldb.SetConnMaxLifetime(0)
+	} else {
+		sqldb.SetConnMaxLifetime(5 * time.Minute)
+	}
 
 	db := bun.NewDB(sqldb, sqlitedialect.New())
 
@@ -376,6 +407,13 @@ func maxOpenConns() int {
 // deriveBunDBPGOptions takes an application config and returns either a ready-to-use set of options
 // with sensible defaults, or an error if it's not satisfied by the provided config.
 func deriveBunDBPGOptions() (*pgx.ConnConfig, error) {
+	url := config.GetDbPostgresConnectionString()
+
+	// if database URL is defined, ignore other DB related configuration fields
+	if url != "" {
+		cfg, err := pgx.ParseConfig(url)
+		return cfg, err
+	}
 	// these are all optional, the db adapter figures out defaults
 	address := config.GetDbAddress()
 
@@ -458,7 +496,8 @@ func deriveBunDBPGOptions() (*pgx.ConnConfig, error) {
 
 // buildSQLiteAddress will build an SQLite address string from given config input,
 // appending user defined SQLite connection preferences (e.g. cache_size, journal_mode etc).
-func buildSQLiteAddress(addr string) string {
+// The returned bool indicates whether this is an in-memory address or not.
+func buildSQLiteAddress(addr string) (string, bool) {
 	// Notes on SQLite preferences:
 	//
 	// - SQLite by itself supports setting a subset of its configuration options
@@ -516,11 +555,11 @@ func buildSQLiteAddress(addr string) string {
 	// see https://pkg.go.dev/modernc.org/sqlite#Driver.Open
 	prefs.Add("_txlock", "immediate")
 
+	inMem := false
 	if addr == ":memory:" {
-		log.Warn(nil, "using sqlite in-memory mode; all data will be deleted when gts shuts down; this mode should only be used for debugging or running tests")
-
 		// Use random name for in-memory instead of ':memory:', so
 		// multiple in-mem databases can be created without conflict.
+		inMem = true
 		addr = "/" + uuid.NewString()
 		prefs.Add("vfs", "memdb")
 	}
@@ -554,5 +593,5 @@ func buildSQLiteAddress(addr string) string {
 	b.WriteString(addr)
 	b.WriteString("?")
 	b.WriteString(prefs.Encode())
-	return b.String()
+	return b.String(), inMem
 }
