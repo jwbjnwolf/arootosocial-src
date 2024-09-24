@@ -90,7 +90,7 @@ func (f *Filter) isStatusVisible(ctx context.Context, requester *gtsmodel.Accoun
 		return false, nil
 	}
 
-	if status.Visibility == gtsmodel.VisibilityPublic || status.Visibility == gtsmodel.VisibilityUnlocked {
+	if status.Visibility == gtsmodel.VisibilityPublic {
 		// This status will be visible to all.
 		return true, nil
 	}
@@ -99,6 +99,11 @@ func (f *Filter) isStatusVisible(ctx context.Context, requester *gtsmodel.Accoun
 		// This request is WITHOUT auth, and status is NOT public.
 		log.Trace(ctx, "unauthorized request to non-public status")
 		return false, nil
+	}
+
+	if status.Visibility == gtsmodel.VisibilityUnlocked {
+		// This status is visible to all auth'd accounts.
+		return true, nil
 	}
 
 	if requester.ID == status.AccountID {
