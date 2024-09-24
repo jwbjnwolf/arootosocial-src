@@ -55,8 +55,24 @@ func EmojifyWeb(emojis []apimodel.Emoji, html template.HTML) template.HTML {
 			// Original image source.
 			buf.WriteString(`<img `)
 			{
-				buf.WriteString(`class="emoji" `)
+				buf.WriteString(`class="emoji original" `)
 				buf.WriteString(`src="` + url + `" `)
+				buf.WriteString(`title=":` + code + `:" `)
+				buf.WriteString(`alt=":` + code + `:" `)
+				// Lazy load emojis when
+				// they scroll into view.
+				buf.WriteString(`loading="lazy" `)
+				// Limit size to avoid showing
+				// huge emojis when unstyled.
+				buf.WriteString(`width="25" height="25" `)
+			}
+			buf.WriteString(`/>`)
+
+			// Static version globally.
+			buf.WriteString(`<img `)
+			{
+				buf.WriteString(`class="emoji static" `)
+				buf.WriteString(`src="` + staticURL + `" `)
 				buf.WriteString(`title=":` + code + `:" `)
 				buf.WriteString(`alt=":` + code + `:" `)
 				// Lazy load emojis when
