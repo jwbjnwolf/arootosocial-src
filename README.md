@@ -8,7 +8,8 @@ Arooooo!!
 - GoToSocial: https://github.com/superseriousbusiness/gotosocial.
 
 # Changes:
-- Make unlisted posts viewable via link in the web interface, (still hidden from profile view): [bbcdade6daabfb17d5daae941494d111f9e041c3](https://github.com/jwbjnwolf/arootosocial-src/commit/bbcdade6daabfb17d5daae941494d111f9e041c3)
+- Make unlisted posts viewable via link in the web interface, (still hidden from profile view): [27ba6ff7987c3b7cb3823d677afff8a716e928d7](https://github.com/jwbjnwolf/arootosocial-src/commit/27ba6ff7987c3b7cb3823d677afff8a716e928d7).
+- Change animated emojis to only animate on hover/tap in the web interface, whilst still respecting `prefers-reduced-motion`: [5a9095d49a0363fe120dada4ea0ba1a499c2065b](https://github.com/jwbjnwolf/arootosocial-src/commit/5a9095d49a0363fe120dada4ea0ba1a499c2065b/).
 
 # Building:
 - Clone repo locally along with upstream added as remote "upstream".
