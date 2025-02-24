@@ -17,7 +17,7 @@ Documentation is at [docs.gotosocial.org](https://docs.gotosocial.org). You can 
 
 To build from source, check the [CONTRIBUTING.md](https://github.com/superseriousbusiness/gotosocial/blob/main/CONTRIBUTING.md) file.
 
-Here's a screenshot of the instance landing page!
+Here's a screenshot of the instance landing page! Check out the project's [official account](https://gts.superseriousbusiness.org/@gotosocial) running on GoToSocial.
 
 ![Screenshot of the landing page for the GoToSocial instance goblin.technology. It shows basic information about the instance; number of users and posts etc.](https://raw.githubusercontent.com/superseriousbusiness/gotosocial/main/docs/overrides/public/instancesplash.png)
 <!--overview-end-->
@@ -43,7 +43,8 @@ Here's a screenshot of the instance landing page!
 - [Known Issues](#known-issues)
 - [Installing GoToSocial](#installing-gotosocial)
   - [Supported Platforms](#supported-platforms)
-    - [FreeBSD](#freebsd)
+    - [64-bit](#64-bit)
+    - [BSDs](#bsds)
     - [32-bit](#32-bit)
     - [OpenBSD](#openbsd)
   - [Stable Releases](#stable-releases)
@@ -113,7 +114,7 @@ The Mastodon API has become the de facto standard for client communication with 
 Though most apps that implement the Mastodon API should work, GoToSocial is tested and works reliably with beautiful apps like:
 
 * [Tusky](https://tusky.app/) for Android
-* [Semaphore](https://semaphore.social/) in the browser
+* [Pinafore](https://pinafore.social/) in the browser
 * [Feditext](https://github.com/feditext/feditext) (beta) on iOS, iPadOS and macOS
 
 If you've used Mastodon with a third-party app before, you'll find using GoToSocial a breeze.
@@ -225,10 +226,11 @@ Simply download the binary + assets (or Docker container), tweak your configurat
 
 ### Safety + security features
 
-- Built-in, automatic support for secure HTTPS with [Let's Encrypt](https://letsencrypt.org/).
-- Strict privacy enforcement for posts and strict blocking logic.
-- Import and export allow lists and deny lists. Subscribe to community-created block lists (think Ad blocker, but for federation!) (feature still in progress).
+- Strict privacy enforcement for posts, and strict blocking logic.
+- [Choose the visibility of posts on the web view of your profile](https://docs.gotosocial.org/en/latest/user_guide/settings/#visibility-level-of-posts-to-show-on-your-profile).
+- [Import, export](https://docs.gotosocial.org/en/latest/admin/settings/#importexport), and [subscribe](https://docs.gotosocial.org/en/latest/admin/domain_permission_subscriptions) to community-created domain allow and domain block lists.
 - HTTP signature authentication: GoToSocial requires [HTTP Signatures](https://datatracker.ietf.org/doc/html/draft-cavage-http-signatures-12) when sending and receiving messages, to ensure that your messages can't be tampered with and your identity can't be forged.
+- Built-in, automatic support for secure HTTPS with [Let's Encrypt](https://letsencrypt.org/).
 
 ### Various federation modes
 
@@ -275,19 +277,32 @@ Platforms that we don't officially support *may* still work, but we can't test o
 
 This is the current status of support offered by GoToSocial for different platforms (if something is unlisted it means we haven't checked yet so we don't know):
 
-| OS      | Architecture            | Support level                      | Binary archive | Docker container |
-| ------- | ----------------------- | ---------------------------------- | -------------- | ---------------- |
-| Linux   | x86-64/AMD64 (64-bit)   | 🟢 Full                            | Yes            | Yes              |
-| Linux   | Armv8/ARM64 (64-bit)    | 🟢 Full                            | Yes            | Yes              |
-| FreeBSD | x86-64/AMD64 (64-bit)   | 🟢 Full<sup>[1](#freebsd)</sup>    | Yes            | No               |
-| Linux   | x86-32/i386 (32-bit)    | 🟡 Partial<sup>[2](#32-bit)</sup>  | Yes            | Yes              |
-| Linux   | Armv7/ARM32 (32-bit)    | 🟡 Partial<sup>[2](#32-bit)</sup>  | Yes            | Yes              |
-| Linux   | Armv6/ARM32 (32-bit)    | 🟡 Partial<sup>[2](#32-bit)</sup>  | Yes            | Yes              |
-| OpenBSD | Any                     | 🔴 None<sup>[3](#openbsd)</sup>    | No             | No               |
+| OS      | Architecture            | Support level                             | Binary archive | Docker container |
+| ------- | ----------------------- | ----------------------------------------- | -------------- | ---------------- |
+| Linux   | x86-64/AMD64 (64-bit)   | 🟢 Full<sup>[1](#64-bit)</sup>            | Yes            | Yes              |
+| Linux   | Armv8/ARM64  (64-bit)   | 🟢 Full<sup>[1](#64-bit)</sup>            | Yes            | Yes              |
+| FreeBSD | x86-64/AMD64 (64-bit)   | 🟢 Full<sup>[1](#64-bit),[2](#bsds)</sup> | Yes            | No               |
+| FreeBSD | Armv8/ARM64  (64-bit)   | 🟢 Full<sup>[1](#64-bit),[2](#bsds)</sup> | Yes            | No               |
+| NetBSD  | x86-64/AMD64 (64-bit)   | 🟢 Full<sup>[1](#64-bit),[2](#bsds)</sup> | Yes            | No               |
+| NetBSD  | Armv8/ARM64  (64-bit)   | 🟢 Full<sup>[1](#64-bit),[2](#bsds)</sup> | Yes            | No               |
+| Linux   | x86-32/i386 (32-bit)    | 🟡 Partial<sup>[3](#32-bit)</sup>         | Yes            | Yes              |
+| Linux   | Armv7/ARM32 (32-bit)    | 🟡 Partial<sup>[3](#32-bit)</sup>         | Yes            | Yes              |
+| Linux   | Armv6/ARM32 (32-bit)    | 🟡 Partial<sup>[3](#32-bit)</sup>         | Yes            | Yes              |
+| OpenBSD | Any                     | 🔴 None<sup>[4](#openbsd)</sup>           | No             | No               |
 
-#### FreeBSD
+#### 64-bit
 
-Mostly works, just a few issues with WASM SQLite; check release notes carefully when installing on FreeBSD. If running with Postgres you should have no issues.
+64-bit platforms require the following (now, very common) CPU features:
+
+- x86-64 require SSE4.1 (for both media decoding and WASM SQLite)
+
+- Armv8 require ARM64 Large System Extensions (specifically when using WASM SQLite)
+
+Without these features, performance will suffer. In these situations, you may have some success building a binary yourself with the totally **unsupported, experimental** [nowasm](https://docs.gotosocial.org/en/latest/advanced/builds/nowasm/) tag.
+
+#### BSDs
+
+Mostly works, just [a few things to keep in mind](https://github.com/ncruces/go-sqlite3/wiki/Support-matrix) with WASM SQLite; check release notes carefully when installing on NetBSD or FreeBSD. If running with Postgres you should have no issues.
 
 #### 32-bit
 
@@ -295,11 +310,11 @@ GtS doesn't work well on 32-bit systems like i386, or Armv6/v7, mainly due to pe
 
 We don't recommend running GtS on 32-bit, but you may have some success either turning off remote media processing altogether, or building a binary yourself with the totally **unsupported, experimental** [nowasm](https://docs.gotosocial.org/en/latest/advanced/builds/nowasm/) tag.
 
-For more guidance, check release notes when trying to install on 32-bit. 
+For more guidance, check release notes when trying to install on 32-bit.
 
 #### OpenBSD
 
-Marked as unsupported due to performance issues (high memory usage when idle, crashes while processing media).
+Marked as unsupported due to performance issues (no WASM compiler, high memory usage when idle, crashes while processing media).
 
 While we don't support running GtS on OpenBSD, you may have some success building a binary yourself with the totally **unsupported, experimental** [nowasm](https://docs.gotosocial.org/en/latest/advanced/builds/nowasm/) tag.
 
@@ -420,6 +435,7 @@ The following open source libraries, frameworks, and tools are used by GoToSocia
   - [superseriousbusiness/exif-terminator](https://codeberg.org/superseriousbusiness/exif-terminator); EXIF data removal. [GNU AGPL v3 LICENSE](https://spdx.org/licenses/AGPL-3.0-or-later.html).
   - [superseriousbusiness/httpsig](https://github.com/superseriousbusiness/httpsig) forked from [go-fed/httpsig](https://github.com/go-fed/httpsig); secure HTTP signature library. [BSD-3-Clause License](https://spdx.org/licenses/BSD-3-Clause.html).
   - [superseriousbusiness/oauth2](https://github.com/superseriousbusiness/oauth2) forked from [go-oauth2/oauth2](https://github.com/go-oauth2/oauth2); OAuth server framework and token handling. [MIT License](https://spdx.org/licenses/MIT.html).
+- [temoto/robotstxt](https://github.com/temoto/robotstxt); robots.txt parsing. [MIT License](https://spdx.org/licenses/MIT.html).
 - [tdewolff/minify](https://github.com/tdewolff/minify); HTML minification for Markdown-submitted posts. [MIT License](https://spdx.org/licenses/MIT.html).
 - [uber-go/automaxprocs](https://github.com/uber-go/automaxprocs); GOMAXPROCS automation. [MIT License](https://spdx.org/licenses/MIT.html).
 - [ulule/limiter](https://github.com/ulule/limiter); http rate limit middleware. [MIT License](https://spdx.org/licenses/MIT.html).

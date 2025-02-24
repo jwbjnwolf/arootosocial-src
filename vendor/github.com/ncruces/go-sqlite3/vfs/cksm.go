@@ -101,7 +101,15 @@ func (c cksmFile) Pragma(name string, value string) (string, error) {
 	return "", _NOTFOUND
 }
 
-func (c cksmFile) fileControl(ctx context.Context, mod api.Module, op _FcntlOpcode, pArg uint32) _ErrorCode {
+func (c cksmFile) DeviceCharacteristics() DeviceCharacteristic {
+	ret := c.File.DeviceCharacteristics()
+	if c.verifyCksm {
+		ret &^= IOCAP_SUBPAGE_READ
+	}
+	return ret
+}
+
+func (c cksmFile) fileControl(ctx context.Context, mod api.Module, op _FcntlOpcode, pArg ptr_t) _ErrorCode {
 	switch op {
 	case _FCNTL_CKPT_START:
 		c.inCkpt = true

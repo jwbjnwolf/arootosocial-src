@@ -181,6 +181,10 @@ func ffmpeg(ctx context.Context, inpath string, outpath string, args ...string) 
 			}
 			fscfg = fscfg.WithFSMount(shared, path.Dir(inpath))
 
+			// Set anonymous module name.
+			modcfg = modcfg.WithName("")
+
+			// Update with prepared fs config.
 			return modcfg.WithFSConfig(fscfg)
 		},
 	})
@@ -247,6 +251,10 @@ func ffprobe(ctx context.Context, filepath string) (*result, error) {
 			}
 			fscfg = fscfg.WithFSMount(in, path.Dir(filepath))
 
+			// Set anonymous module name.
+			modcfg = modcfg.WithName("")
+
+			// Update with prepared fs config.
 			return modcfg.WithFSConfig(fscfg)
 		},
 	})
@@ -369,12 +377,15 @@ func (res *result) GetFileType() (gtsmodel.FileType, string, string) {
 	case "mp3":
 		if len(res.audio) > 0 {
 			switch res.audio[0].codec {
+			case "mp1":
+				return gtsmodel.FileTypeAudio,
+					"audio/mpeg", "mp1"
 			case "mp2":
 				return gtsmodel.FileTypeAudio,
-					"audio/mp2", "mp2"
+					"audio/mpeg", "mp2"
 			case "mp3":
 				return gtsmodel.FileTypeAudio,
-					"audio/mp3", "mp3"
+					"audio/mpeg", "mp3"
 			}
 		}
 	case "asf":

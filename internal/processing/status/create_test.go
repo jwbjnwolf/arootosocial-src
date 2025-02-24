@@ -48,7 +48,7 @@ func (suite *StatusCreateTestSuite) TestProcessContentWarningWithQuotationMarks(
 		SpoilerText: "\"test\"", // these should not be html-escaped when the final text is rendered
 		Visibility:  apimodel.VisibilityPublic,
 		LocalOnly:   util.Ptr(false),
-		ScheduledAt: "",
+		ScheduledAt: nil,
 		Language:    "en",
 		ContentType: apimodel.StatusContentTypePlain,
 	}
@@ -75,7 +75,7 @@ func (suite *StatusCreateTestSuite) TestProcessContentWarningWithHTMLEscapedQuot
 		SpoilerText: "&#34test&#34", // the html-escaped quotation marks should appear as normal quotation marks in the finished text
 		Visibility:  apimodel.VisibilityPublic,
 		LocalOnly:   util.Ptr(false),
-		ScheduledAt: "",
+		ScheduledAt: nil,
 		Language:    "en",
 		ContentType: apimodel.StatusContentTypePlain,
 	}
@@ -106,7 +106,7 @@ func (suite *StatusCreateTestSuite) TestProcessStatusMarkdownWithUnderscoreEmoji
 		Sensitive:   false,
 		Visibility:  apimodel.VisibilityPublic,
 		LocalOnly:   util.Ptr(false),
-		ScheduledAt: "",
+		ScheduledAt: nil,
 		Language:    "en",
 		ContentType: apimodel.StatusContentTypeMarkdown,
 	}
@@ -133,7 +133,7 @@ func (suite *StatusCreateTestSuite) TestProcessStatusMarkdownWithSpoilerTextEmoj
 		Sensitive:   false,
 		Visibility:  apimodel.VisibilityPublic,
 		LocalOnly:   util.Ptr(false),
-		ScheduledAt: "",
+		ScheduledAt: nil,
 		Language:    "en",
 		ContentType: apimodel.StatusContentTypeMarkdown,
 	}
@@ -164,13 +164,13 @@ func (suite *StatusCreateTestSuite) TestProcessMediaDescriptionTooShort() {
 		SpoilerText: "",
 		Visibility:  apimodel.VisibilityPublic,
 		LocalOnly:   util.Ptr(false),
-		ScheduledAt: "",
+		ScheduledAt: nil,
 		Language:    "en",
 		ContentType: apimodel.StatusContentTypePlain,
 	}
 
 	apiStatus, err := suite.status.Create(ctx, creatingAccount, creatingApplication, statusCreateForm)
-	suite.EqualError(err, "media 01F8MH8RMYQ6MSNY3JM2XT1CQ5 description too short, at least 100 required")
+	suite.EqualError(err, "media description less than min chars (100)")
 	suite.Nil(apiStatus)
 }
 
@@ -189,7 +189,7 @@ func (suite *StatusCreateTestSuite) TestProcessLanguageWithScriptPart() {
 		SpoilerText: "",
 		Visibility:  apimodel.VisibilityPublic,
 		LocalOnly:   util.Ptr(false),
-		ScheduledAt: "",
+		ScheduledAt: nil,
 		Language:    "zh-Hans",
 		ContentType: apimodel.StatusContentTypePlain,
 	}
@@ -219,7 +219,7 @@ func (suite *StatusCreateTestSuite) TestProcessReplyToUnthreadedRemoteStatus() {
 		SpoilerText: "this is a reply",
 		Visibility:  apimodel.VisibilityPublic,
 		LocalOnly:   util.Ptr(false),
-		ScheduledAt: "",
+		ScheduledAt: nil,
 		Language:    "en",
 		ContentType: apimodel.StatusContentTypePlain,
 	}

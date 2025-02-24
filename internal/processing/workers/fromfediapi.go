@@ -124,6 +124,10 @@ func (p *Processor) ProcessFromFediAPI(ctx context.Context, fMsg *messages.FromF
 		// UPDATE ACCOUNT
 		case ap.ActorPerson:
 			return p.fediAPI.UpdateAccount(ctx, fMsg)
+
+		// UPDATE QUESTION
+		case ap.ActivityQuestion:
+			return p.fediAPI.UpdatePollVote(ctx, fMsg)
 		}
 
 	// ACCEPT SOMETHING
@@ -188,6 +192,14 @@ func (p *Processor) ProcessFromFediAPI(ctx context.Context, fMsg *messages.FromF
 		// fromfediapi_move.go.
 		if fMsg.APObjectType == ap.ActorPerson {
 			return p.fediAPI.MoveAccount(ctx, fMsg)
+		}
+
+	// UNDO SOMETHING
+	case ap.ActivityUndo:
+
+		// UNDO ANNOUNCE
+		if fMsg.APObjectType == ap.ActivityAnnounce {
+			return p.fediAPI.UndoAnnounce(ctx, fMsg)
 		}
 	}
 
@@ -347,7 +359,8 @@ func (p *fediAPI) CreatePollVote(ctx context.Context, fMsg *messages.FromFediAPI
 		return gtserror.Newf("cannot cast %T -> *gtsmodel.PollVote", fMsg.GTSModel)
 	}
 
-	// Insert the new poll vote in the database.
+	// Insert the new poll vote in the database, note this
+	// will handle updating votes on the poll model itself.
 	if err := p.state.DB.PutPollVote(ctx, vote); err != nil {
 		return gtserror.Newf("error inserting poll vote in db: %w", err)
 	}
@@ -368,9 +381,9 @@ func (p *fediAPI) CreatePollVote(ctx context.Context, fMsg *messages.FromFediAPI
 	status.Poll = vote.Poll
 
 	if *status.Local {
-		// Before federating it, increment the
-		// poll vote counts on our local copy.
-		status.Poll.IncrementVotes(vote.Choices)
+		// Before federating it, increment the poll vote
+		// and voter counts, *only on our local copy*.
+		status.Poll.IncrementVotes(vote.Choices, true)
 
 		// These were poll votes in a local status, we need to
 		// federate the updated status model with latest vote counts.
@@ -379,8 +392,43 @@ func (p *fediAPI) CreatePollVote(ctx context.Context, fMsg *messages.FromFediAPI
 		}
 	}
 
-	// Interaction counts changed on the source status, uncache from timelines.
-	p.surface.invalidateStatusFromTimelines(ctx, vote.Poll.StatusID)
+	// Interaction counts changed, uncache from timelines.
+	p.surface.invalidateStatusFromTimelines(ctx, status.ID)
+
+	return nil
+}
+
+func (p *fediAPI) UpdatePollVote(ctx context.Context, fMsg *messages.FromFediAPI) error {
+	// Cast poll vote type from the worker message.
+	vote, ok := fMsg.GTSModel.(*gtsmodel.PollVote)
+	if !ok {
+		return gtserror.Newf("cannot cast %T -> *gtsmodel.PollVote", fMsg.GTSModel)
+	}
+
+	// Update poll vote model (specifically only choices) in the database.
+	if err := p.state.DB.UpdatePollVote(ctx, vote, "choices"); err != nil {
+		return gtserror.Newf("error updating poll vote in db: %w", err)
+	}
+
+	// Update the vote counts on the poll model itself. These will have
+	// been updated by message pusher as we can't know which were new.
+	if err := p.state.DB.UpdatePoll(ctx, vote.Poll, "votes"); err != nil {
+		return gtserror.Newf("error updating poll in db: %w", err)
+	}
+
+	// Get the origin status.
+	status := vote.Poll.Status
+
+	if *status.Local {
+		// These were poll votes in a local status, we need to
+		// federate the updated status model with latest vote counts.
+		if err := p.federate.UpdateStatus(ctx, status); err != nil {
+			log.Errorf(ctx, "error federating status update: %v", err)
+		}
+	}
+
+	// Interaction counts changed, uncache from timelines.
+	p.surface.invalidateStatusFromTimelines(ctx, status.ID)
 
 	return nil
 }
@@ -762,7 +810,7 @@ func (p *fediAPI) UpdateAccount(ctx context.Context, fMsg *messages.FromFediAPI)
 		account,
 		apubAcc,
 
-		// Force refresh within 10s window.
+		// Force refresh within 5s window.
 		//
 		// Missing account updates could be
 		// detrimental to federation if they
@@ -836,16 +884,16 @@ func (p *fediAPI) AcceptRemoteStatus(ctx context.Context, fMsg *messages.FromFed
 		return gtserror.Newf("%T not parseable as *url.URL", fMsg.APObject)
 	}
 
-	acceptIRI := fMsg.APIRI
-	if acceptIRI == nil {
-		return gtserror.New("acceptIRI was nil")
+	approvedByURI := fMsg.APIRI
+	if approvedByURI == nil {
+		return gtserror.New("approvedByURI was nil")
 	}
 
 	// Assume we're accepting a status; create a
 	// barebones status for dereferencing purposes.
 	bareStatus := &gtsmodel.Status{
 		URI:           objectIRI.String(),
-		ApprovedByURI: acceptIRI.String(),
+		ApprovedByURI: approvedByURI.String(),
 	}
 
 	// Call RefreshStatus() to process the provided
@@ -864,7 +912,7 @@ func (p *fediAPI) AcceptRemoteStatus(ctx context.Context, fMsg *messages.FromFed
 	}
 
 	// No error means it was indeed a remote status, and the
-	// given acceptIRI permitted it. Timeline and notify it.
+	// given approvedByURI permitted it. Timeline and notify it.
 	if err := p.surface.timelineAndNotifyStatus(ctx, status); err != nil {
 		log.Errorf(ctx, "error timelining and notifying status: %v", err)
 	}
@@ -917,8 +965,17 @@ func (p *fediAPI) UpdateStatus(ctx context.Context, fMsg *messages.FromFediAPI) 
 		return gtserror.Newf("cannot cast %T -> *gtsmodel.Status", fMsg.GTSModel)
 	}
 
+	var freshness *dereferencing.FreshnessWindow
+
 	// Cast the updated ActivityPub statusable object .
 	apStatus, _ := fMsg.APObject.(ap.Statusable)
+
+	if apStatus != nil {
+		// If an AP object was provided, we
+		// allow very fast refreshes that likely
+		// indicate a status edit after post.
+		freshness = dereferencing.Freshest
+	}
 
 	// Fetch up-to-date attach status attachments, etc.
 	status, _, err := p.federate.RefreshStatus(
@@ -926,8 +983,7 @@ func (p *fediAPI) UpdateStatus(ctx context.Context, fMsg *messages.FromFediAPI) 
 		fMsg.Receiving.Username,
 		existing,
 		apStatus,
-		// Force refresh within 5min window.
-		dereferencing.Fresh,
+		freshness,
 	)
 	if err != nil {
 		log.Errorf(ctx, "error refreshing status: %v", err)
@@ -1148,6 +1204,37 @@ func (p *fediAPI) RejectAnnounce(ctx context.Context, fMsg *messages.FromFediAPI
 	); err != nil {
 		log.Errorf(ctx, "error wiping announce: %v", err)
 	}
+
+	return nil
+}
+
+func (p *fediAPI) UndoAnnounce(
+	ctx context.Context,
+	fMsg *messages.FromFediAPI,
+) error {
+	boost, ok := fMsg.GTSModel.(*gtsmodel.Status)
+	if !ok {
+		return gtserror.Newf("%T not parseable as *gtsmodel.Status", fMsg.GTSModel)
+	}
+
+	// Delete the boost wrapper itself.
+	if err := p.state.DB.DeleteStatusByID(ctx, boost.ID); err != nil {
+		return gtserror.Newf("db error deleting boost: %w", err)
+	}
+
+	// Update statuses count for the requesting account.
+	if err := p.utils.decrementStatusesCount(ctx, fMsg.Requesting, boost); err != nil {
+		log.Errorf(ctx, "error updating account stats: %v", err)
+	}
+
+	// Remove the boost wrapper from all timelines.
+	if err := p.surface.deleteStatusFromTimelines(ctx, boost.ID); err != nil {
+		log.Errorf(ctx, "error removing timelined boost: %v", err)
+	}
+
+	// Interaction counts changed on the boosted status;
+	// uncache the prepared version from all timelines.
+	p.surface.invalidateStatusFromTimelines(ctx, boost.BoostOfID)
 
 	return nil
 }
