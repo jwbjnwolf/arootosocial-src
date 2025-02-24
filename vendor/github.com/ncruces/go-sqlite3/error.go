@@ -15,7 +15,7 @@ type Error struct {
 	str  string
 	msg  string
 	sql  string
-	code uint64
+	code res_t
 }
 
 // Code returns the primary error code for this error.
@@ -106,6 +106,11 @@ func (e ErrorCode) Temporary() bool {
 	return e == BUSY
 }
 
+// ExtendedCode returns the extended error code for this error.
+func (e ErrorCode) ExtendedCode() ExtendedErrorCode {
+	return ExtendedErrorCode(e)
+}
+
 // Error implements the error interface.
 func (e ExtendedErrorCode) Error() string {
 	return util.ErrorCodeString(uint32(e))
@@ -136,27 +141,32 @@ func (e ExtendedErrorCode) Timeout() bool {
 	return e == BUSY_TIMEOUT
 }
 
-func errorCode(err error, def ErrorCode) (msg string, code uint32) {
+// Code returns the primary error code for this error.
+func (e ExtendedErrorCode) Code() ErrorCode {
+	return ErrorCode(e)
+}
+
+func errorCode(err error, def ErrorCode) (msg string, code res_t) {
 	switch code := err.(type) {
 	case nil:
 		return "", _OK
 	case ErrorCode:
-		return "", uint32(code)
+		return "", res_t(code)
 	case xErrorCode:
-		return "", uint32(code)
+		return "", res_t(code)
 	case *Error:
-		return code.msg, uint32(code.code)
+		return code.msg, res_t(code.code)
 	}
 
 	var ecode ErrorCode
 	var xcode xErrorCode
 	switch {
 	case errors.As(err, &xcode):
-		code = uint32(xcode)
+		code = res_t(xcode)
 	case errors.As(err, &ecode):
-		code = uint32(ecode)
+		code = res_t(ecode)
 	default:
-		code = uint32(def)
+		code = res_t(def)
 	}
 	return err.Error(), code
 }
