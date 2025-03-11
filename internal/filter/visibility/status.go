@@ -259,7 +259,7 @@ func (f *Filter) isStatusVisibleUnauthed(ctx context.Context, status *gtsmodel.S
 	// If status is local only,
 	// never show via the web.
 	if status.IsLocalOnly() {
-		return false, nil
+		return true, nil
 	}
 
 	// Check account's settings to see
