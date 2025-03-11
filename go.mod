@@ -1,6 +1,8 @@
 module github.com/superseriousbusiness/gotosocial
 
-go 1.23
+go 1.23.0
+
+toolchain go1.23.3
 
 // Replace go-swagger with our version that fixes (ours particularly) use of Go1.23
 replace github.com/go-swagger/go-swagger => github.com/superseriousbusiness/go-swagger v0.31.0-gts-go1.23-fix
@@ -16,7 +18,7 @@ require (
 	codeberg.org/gruf/go-debug v1.3.0
 	codeberg.org/gruf/go-errors/v2 v2.3.2
 	codeberg.org/gruf/go-fastcopy v1.1.3
-	codeberg.org/gruf/go-ffmpreg v0.6.5
+	codeberg.org/gruf/go-ffmpreg v0.6.6
 	codeberg.org/gruf/go-iotools v0.0.0-20240710125620-934ae9c654cf
 	codeberg.org/gruf/go-kv v1.6.5
 	codeberg.org/gruf/go-list v0.0.0-20240425093752-494db03d641f
@@ -28,7 +30,7 @@ require (
 	codeberg.org/gruf/go-structr v0.8.11
 	codeberg.org/superseriousbusiness/exif-terminator v0.9.1
 	github.com/DmitriyVTitov/size v1.5.0
-	github.com/KimMachineGun/automemlimit v0.7.0
+	github.com/KimMachineGun/automemlimit v0.7.1
 	github.com/SherClockHolmes/webpush-go v1.4.0
 	github.com/buckket/go-blurhash v1.1.0
 	github.com/coreos/go-oidc/v3 v3.12.0
@@ -38,7 +40,7 @@ require (
 	github.com/gin-gonic/gin v1.10.0
 	github.com/go-playground/form/v4 v4.2.1
 	github.com/go-swagger/go-swagger v0.31.0
-	github.com/google/go-cmp v0.6.0
+	github.com/google/go-cmp v0.7.0
 	github.com/google/uuid v1.6.0
 	github.com/gorilla/feeds v1.2.0
 	github.com/gorilla/websocket v1.5.3
@@ -48,7 +50,7 @@ require (
 	github.com/miekg/dns v1.1.63
 	github.com/minio/minio-go/v7 v7.0.85
 	github.com/mitchellh/mapstructure v1.5.0
-	github.com/ncruces/go-sqlite3 v0.23.0
+	github.com/ncruces/go-sqlite3 v0.24.0
 	github.com/oklog/ulid v1.3.1
 	github.com/prometheus/client_golang v1.20.5
 	github.com/rivo/uniseg v0.4.7
@@ -61,13 +63,13 @@ require (
 	github.com/tdewolff/minify/v2 v2.21.3
 	github.com/technologize/otel-go-contrib v1.1.1
 	github.com/temoto/robotstxt v1.1.2
-	github.com/tetratelabs/wazero v1.8.2
+	github.com/tetratelabs/wazero v1.9.0
 	github.com/tomnomnom/linkheader v0.0.0-20180905144013-02ca5825eb80
 	github.com/ulule/limiter/v3 v3.11.2
-	github.com/uptrace/bun v1.2.9
-	github.com/uptrace/bun/dialect/pgdialect v1.2.9
-	github.com/uptrace/bun/dialect/sqlitedialect v1.2.9
-	github.com/uptrace/bun/extra/bunotel v1.2.9
+	github.com/uptrace/bun v1.2.11
+	github.com/uptrace/bun/dialect/pgdialect v1.2.11
+	github.com/uptrace/bun/dialect/sqlitedialect v1.2.11
+	github.com/uptrace/bun/extra/bunotel v1.2.11
 	github.com/wagslane/go-password-validator v0.3.0
 	github.com/yuin/goldmark v1.7.8
 	go.opentelemetry.io/otel v1.34.0
@@ -79,12 +81,12 @@ require (
 	go.opentelemetry.io/otel/sdk/metric v1.34.0
 	go.opentelemetry.io/otel/trace v1.34.0
 	go.uber.org/automaxprocs v1.6.0
-	golang.org/x/crypto v0.33.0
+	golang.org/x/crypto v0.36.0
 	golang.org/x/image v0.24.0
 	golang.org/x/net v0.35.0
-	golang.org/x/oauth2 v0.26.0
-	golang.org/x/sys v0.30.0
-	golang.org/x/text v0.22.0
+	golang.org/x/oauth2 v0.27.0
+	golang.org/x/sys v0.31.0
+	golang.org/x/text v0.23.0
 	gopkg.in/mcuadros/go-syslog.v2 v2.3.0
 	gopkg.in/yaml.v3 v3.0.1
 	modernc.org/sqlite v0.0.0-00010101000000-000000000000
@@ -120,7 +122,7 @@ require (
 	github.com/go-errors/errors v1.1.1 // indirect
 	github.com/go-fed/httpsig v1.1.0 // indirect
 	github.com/go-ini/ini v1.67.0 // indirect
-	github.com/go-jose/go-jose/v4 v4.0.2 // indirect
+	github.com/go-jose/go-jose/v4 v4.0.5 // indirect
 	github.com/go-logr/logr v1.4.2 // indirect
 	github.com/go-logr/stdr v1.2.2 // indirect
 	github.com/go-openapi/analysis v0.23.0 // indirect
@@ -182,7 +184,7 @@ require (
 	github.com/prometheus/client_model v0.6.1 // indirect
 	github.com/prometheus/common v0.61.0 // indirect
 	github.com/prometheus/procfs v0.15.1 // indirect
-	github.com/puzpuzpuz/xsync/v3 v3.5.0 // indirect
+	github.com/puzpuzpuz/xsync/v3 v3.5.1 // indirect
 	github.com/quasoft/memstore v0.0.0-20191010062613-2bce066d2b0b // indirect
 	github.com/remyoudompheng/bigfft v0.0.0-20230129092748-24d4a6f8daec // indirect
 	github.com/rogpeppe/go-internal v1.13.2-0.20241226121412-a5dc8ff20d0a // indirect
@@ -213,7 +215,7 @@ require (
 	golang.org/x/arch v0.13.0 // indirect
 	golang.org/x/exp v0.0.0-20240222234643-814bf88cf225 // indirect
 	golang.org/x/mod v0.22.0 // indirect
-	golang.org/x/sync v0.11.0 // indirect
+	golang.org/x/sync v0.12.0 // indirect
 	golang.org/x/tools v0.28.0 // indirect
 	google.golang.org/genproto/googleapis/api v0.0.0-20250115164207-1a7da9e5054f // indirect
 	google.golang.org/genproto/googleapis/rpc v0.0.0-20250115164207-1a7da9e5054f // indirect
