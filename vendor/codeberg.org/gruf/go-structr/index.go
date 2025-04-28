@@ -1,6 +1,7 @@
 package structr
 
 import (
+	"os"
 	"reflect"
 	"strings"
 	"sync"
@@ -168,7 +169,7 @@ func (i *Index) init(t reflect.Type, cfg IndexConfig, cap int) {
 
 	// Initialize store for
 	// index_entry lists.
-	i.data.init(cap)
+	i.data.Init(cap)
 }
 
 // get_one will fetch one indexed item under key.
@@ -244,11 +245,44 @@ func (i *Index) key(buf *byteutil.Buffer, parts []unsafe.Pointer) string {
 	return string(buf.B)
 }
 
+// add will attempt to add given index entry to appropriate
+// doubly-linked-list in index hashmap. in the case of an
+// existing entry in a "unique" index, it will return false.
+func (i *Index) add(key string, item *indexed_item) bool {
+	// Look for existing.
+	l := i.data.Get(key)
+
+	if l == nil {
+
+		// Allocate new.
+		l = new_list()
+		i.data.Put(key, l)
+
+	} else if is_unique(i.flags) {
+
+		// Collision!
+		return false
+	}
+
+	// Prepare new index entry.
+	entry := new_index_entry()
+	entry.item = item
+	entry.key = key
+	entry.index = i
+
+	// Add ourselves to item's index tracker.
+	item.indexed = append(item.indexed, entry)
+
+	// Add entry to index list.
+	l.push_front(&entry.elem)
+	return true
+}
+
 // append will append the given index entry to appropriate
 // doubly-linked-list in index hashmap. this handles case of
 // overwriting "unique" index entries, and removes from given
 // outer linked-list in the case that it is no longer indexed.
-func (i *Index) append(ll *list, key string, item *indexed_item) {
+func (i *Index) append(key string, item *indexed_item) (evicted *indexed_item) {
 	// Look for existing.
 	l := i.data.Get(key)
 
@@ -267,17 +301,16 @@ func (i *Index) append(ll *list, key string, item *indexed_item) {
 		// Drop index from inner item,
 		// catching the evicted item.
 		e := (*index_entry)(elem.data)
-		evicted := e.item
+		evicted = e.item
 		evicted.drop_index(e)
 
 		// Free unused entry.
 		free_index_entry(e)
 
-		if len(evicted.indexed) == 0 {
-			// Evicted item is not indexed,
-			// remove from outer linked list.
-			ll.remove(&evicted.elem)
-			free_indexed_item(evicted)
+		if len(evicted.indexed) != 0 {
+			// Evicted is still stored
+			// under index, don't return.
+			evicted = nil
 		}
 	}
 
@@ -292,6 +325,7 @@ func (i *Index) append(ll *list, key string, item *indexed_item) {
 
 	// Add entry to index list.
 	l.push_front(&entry.elem)
+	return
 }
 
 // delete will remove all indexed items under key, passing each to hook.
@@ -403,7 +437,8 @@ func new_index_entry() *index_entry {
 func free_index_entry(entry *index_entry) {
 	if entry.elem.next != nil ||
 		entry.elem.prev != nil {
-		should_not_reach()
+		msg := assert("entry not in use")
+		os.Stderr.WriteString(msg + "\n")
 		return
 	}
 	entry.key = ""

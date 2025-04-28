@@ -29,8 +29,9 @@ import (
 	"time"
 
 	"codeberg.org/gruf/go-kv"
-	"github.com/superseriousbusiness/activity/streams"
-	typepublickey "github.com/superseriousbusiness/activity/streams/impl/w3idsecurityv1/type_publickey"
+	"codeberg.org/superseriousbusiness/activity/streams"
+	typepublickey "codeberg.org/superseriousbusiness/activity/streams/impl/w3idsecurityv1/type_publickey"
+	"codeberg.org/superseriousbusiness/httpsig"
 	"github.com/superseriousbusiness/gotosocial/internal/ap"
 	"github.com/superseriousbusiness/gotosocial/internal/config"
 	"github.com/superseriousbusiness/gotosocial/internal/db"
@@ -38,7 +39,6 @@ import (
 	"github.com/superseriousbusiness/gotosocial/internal/gtserror"
 	"github.com/superseriousbusiness/gotosocial/internal/gtsmodel"
 	"github.com/superseriousbusiness/gotosocial/internal/log"
-	"github.com/superseriousbusiness/httpsig"
 )
 
 var (
@@ -199,9 +199,11 @@ func (f *Federator) AuthenticateFederatedRequest(ctx context.Context, requestedU
 		}
 
 		// Dereference the account located at owner URI.
+		// Use exact URI match, not URL match.
 		pubKeyAuth.Owner, _, err = f.GetAccountByURI(ctx,
 			requestedUsername,
 			pubKeyAuth.OwnerURI,
+			false,
 		)
 		if err != nil {
 			if gtserror.StatusCode(err) == http.StatusGone {

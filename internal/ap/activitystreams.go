@@ -20,7 +20,7 @@ package ap
 import (
 	"net/url"
 
-	"github.com/superseriousbusiness/activity/pub"
+	"codeberg.org/superseriousbusiness/activity/pub"
 )
 
 // PublicURI returns a fresh copy of the *url.URL version of the
@@ -98,10 +98,17 @@ const (
 	// that we don't *yet* know what type of Object something is.
 	ObjectUnknown = "Unknown"
 
-	// Extensions and unofficial additions.
+	/* Extensions and unofficial additions */
+
+	/* GtS stuff */
+
 	ObjectLikeApproval     = "LikeApproval"
 	ObjectReplyApproval    = "ReplyApproval"
 	ObjectAnnounceApproval = "AnnounceApproval"
+
+	/* Funkwhale stuff */
+
+	ObjectAlbum = "Album"
 )
 
 // isActivity returns whether AS type name is of an Activity (NOT IntransitiveActivity).

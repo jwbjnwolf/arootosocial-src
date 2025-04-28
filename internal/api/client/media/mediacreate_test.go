@@ -62,7 +62,6 @@ type MediaCreateTestSuite struct {
 
 	// standard suite models
 	testTokens       map[string]*gtsmodel.Token
-	testClients      map[string]*gtsmodel.Client
 	testApplications map[string]*gtsmodel.Application
 	testUsers        map[string]*gtsmodel.User
 	testAccounts     map[string]*gtsmodel.Account
@@ -101,7 +100,7 @@ func (suite *MediaCreateTestSuite) SetupTest() {
 	)
 
 	suite.mediaManager = testrig.NewTestMediaManager(&suite.state)
-	suite.oauthServer = testrig.NewTestOauthServer(suite.db)
+	suite.oauthServer = testrig.NewTestOauthServer(&suite.state)
 	suite.federator = testrig.NewTestFederator(&suite.state, testrig.NewTestTransportController(&suite.state, testrig.NewMockHTTPClient(nil, "../../../../testrig/media")), suite.mediaManager)
 	suite.emailSender = testrig.NewEmailSender("../../../../web/template/", nil)
 	suite.processor = testrig.NewTestProcessor(
@@ -117,7 +116,6 @@ func (suite *MediaCreateTestSuite) SetupTest() {
 
 	// setup test data
 	suite.testTokens = testrig.NewTestTokens()
-	suite.testClients = testrig.NewTestClients()
 	suite.testApplications = testrig.NewTestApplications()
 	suite.testUsers = testrig.NewTestUsers()
 	suite.testAccounts = testrig.NewTestAccounts()
@@ -299,7 +297,7 @@ func (suite *MediaCreateTestSuite) TestMediaCreateSuccessfulV2() {
 	}, *attachmentReply.Meta)
 	suite.Equal("LiB|W-#6RQR.~qvzRjWF_3rqV@a$", *attachmentReply.Blurhash)
 	suite.NotEmpty(attachmentReply.ID)
-	suite.Nil(attachmentReply.URL)
+	suite.NotEmpty(attachmentReply.URL)
 	suite.NotEmpty(attachmentReply.PreviewURL)
 	suite.Equal(len(storageKeysBeforeRequest)+2, len(storageKeysAfterRequest)) // 2 images should be added to storage: the original and the thumbnail
 }

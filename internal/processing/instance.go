@@ -106,9 +106,9 @@ func (p *Processor) InstancePeersGet(ctx context.Context, includeSuspended bool,
 			}
 
 			domains = append(domains, &apimodel.Domain{
-				Domain:        d,
-				SuspendedAt:   util.FormatISO8601(domainBlock.CreatedAt),
-				PublicComment: domainBlock.PublicComment,
+				Domain:      d,
+				SuspendedAt: util.FormatISO8601(domainBlock.CreatedAt),
+				Comment:     &domainBlock.PublicComment,
 			})
 		}
 	}
@@ -165,7 +165,7 @@ func (p *Processor) InstancePatch(ctx context.Context, form *apimodel.InstanceSe
 		}
 
 		// Don't allow html in site title.
-		instance.Title = text.SanitizeToPlaintext(title)
+		instance.Title = text.StripHTMLFromText(title)
 		columns = append(columns, "title")
 	}
 
@@ -235,7 +235,7 @@ func (p *Processor) InstancePatch(ctx context.Context, form *apimodel.InstanceSe
 			return nil, gtserror.NewErrorBadRequest(err, err.Error())
 		}
 
-		instance.CustomCSS = text.SanitizeToPlaintext(customCSS)
+		instance.CustomCSS = text.StripHTMLFromText(customCSS)
 		columns = append(columns, []string{"custom_css"}...)
 	}
 

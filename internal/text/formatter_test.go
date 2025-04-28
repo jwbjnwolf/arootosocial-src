@@ -37,7 +37,6 @@ type TextStandardTestSuite struct {
 
 	// standard suite models
 	testTokens       map[string]*gtsmodel.Token
-	testClients      map[string]*gtsmodel.Client
 	testApplications map[string]*gtsmodel.Application
 	testUsers        map[string]*gtsmodel.User
 	testAccounts     map[string]*gtsmodel.Account
@@ -53,7 +52,6 @@ type TextStandardTestSuite struct {
 
 func (suite *TextStandardTestSuite) SetupSuite() {
 	suite.testTokens = testrig.NewTestTokens()
-	suite.testClients = testrig.NewTestClients()
 	suite.testApplications = testrig.NewTestApplications()
 	suite.testUsers = testrig.NewTestUsers()
 	suite.testAccounts = testrig.NewTestAccounts()
@@ -87,6 +85,16 @@ func (suite *TextStandardTestSuite) TearDownTest() {
 
 func (suite *TextStandardTestSuite) FromMarkdown(input string) *text.FormatResult {
 	return suite.formatter.FromMarkdown(
+		context.Background(),
+		suite.parseMention,
+		suite.testAccounts["local_account_1"].ID,
+		"dummy_status_ID",
+		input,
+	)
+}
+
+func (suite *TextStandardTestSuite) FromMarkdownBasic(input string) *text.FormatResult {
+	return suite.formatter.FromMarkdownBasic(
 		context.Background(),
 		suite.parseMention,
 		suite.testAccounts["local_account_1"].ID,

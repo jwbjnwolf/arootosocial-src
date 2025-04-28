@@ -55,7 +55,6 @@ type AuthStandardTestSuite struct {
 
 	// standard suite models
 	testTokens       map[string]*gtsmodel.Token
-	testClients      map[string]*gtsmodel.Client
 	testApplications map[string]*gtsmodel.Application
 	testUsers        map[string]*gtsmodel.User
 	testAccounts     map[string]*gtsmodel.Account
@@ -71,7 +70,6 @@ const (
 
 func (suite *AuthStandardTestSuite) SetupSuite() {
 	suite.testTokens = testrig.NewTestTokens()
-	suite.testClients = testrig.NewTestClients()
 	suite.testApplications = testrig.NewTestApplications()
 	suite.testUsers = testrig.NewTestUsers()
 	suite.testAccounts = testrig.NewTestAccounts()
@@ -98,7 +96,7 @@ func (suite *AuthStandardTestSuite) SetupTest() {
 		testrig.NewNoopWebPushSender(),
 		suite.mediaManager,
 	)
-	suite.authModule = auth.New(suite.db, suite.processor, suite.idp)
+	suite.authModule = auth.New(&suite.state, suite.processor, suite.idp)
 
 	testrig.StandardDBSetup(suite.db, suite.testAccounts)
 	testrig.StartNoopWorkers(&suite.state)
@@ -109,28 +107,40 @@ func (suite *AuthStandardTestSuite) TearDownTest() {
 	testrig.StopWorkers(&suite.state)
 }
 
-func (suite *AuthStandardTestSuite) newContext(requestMethod string, requestPath string, requestBody []byte, bodyContentType string) (*gin.Context, *httptest.ResponseRecorder) {
-	// create the recorder and gin test context
+func (suite *AuthStandardTestSuite) newContext(
+	requestMethod string,
+	requestPath string,
+	requestBody []byte,
+	bodyContentType string,
+) (*gin.Context, *httptest.ResponseRecorder) {
+	// Create the recorder and test context.
 	recorder := httptest.NewRecorder()
 	ctx, engine := testrig.CreateGinTestContext(recorder, nil)
 
-	// load templates into the engine
+	// Load templates into the engine.
 	testrig.ConfigureTemplatesWithGin(engine, "../../../web/template")
 
-	// create the request
+	// Create the request itself.
 	protocol := config.GetProtocol()
 	host := config.GetHost()
 	baseURI := fmt.Sprintf("%s://%s", protocol, host)
 	requestURI := fmt.Sprintf("%s/%s", baseURI, requestPath)
+	ctx.Request = httptest.NewRequest(
+		requestMethod,
+		requestURI,
+		bytes.NewReader(requestBody),
+	)
 
-	ctx.Request = httptest.NewRequest(requestMethod, requestURI, bytes.NewReader(requestBody)) // the endpoint we're hitting
-	ctx.Request.Header.Set("accept", "text/html")
-
+	// Transmit appropriate Content-Type.
 	if bodyContentType != "" {
 		ctx.Request.Header.Set("Content-Type", bodyContentType)
 	}
 
-	// trigger the session middleware on the context
+	// Accept whatever, so we can use
+	// this to test both HTML and JSON.
+	ctx.Request.Header.Set("accept", "*/*")
+
+	// Trigger the session middleware on the context.
 	store := memstore.NewStore(make([]byte, 32), make([]byte, 32))
 	store.Options(middleware.SessionOptions())
 	sessionMiddleware := sessions.Sessions("gotosocial-localhost", store)

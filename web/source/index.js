@@ -64,6 +64,15 @@ skulk({
 				}]
 			],
 		},
+		frontend_prerender: {
+			entryFile: "frontend_prerender",
+			outputFile: "frontend_prerender.js",
+			preset: ["js"],
+			prodCfg: prodCfg,
+			transform: [
+				["babelify", { global: true }]
+			],
+		},
 		settings: {
 			entryFile: "settings",
 			outputFile: "settings.js",

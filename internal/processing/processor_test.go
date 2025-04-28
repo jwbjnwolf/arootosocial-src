@@ -22,6 +22,7 @@ import (
 
 	"github.com/stretchr/testify/suite"
 	"github.com/superseriousbusiness/gotosocial/internal/admin"
+	apiutil "github.com/superseriousbusiness/gotosocial/internal/api/util"
 	"github.com/superseriousbusiness/gotosocial/internal/cleaner"
 	"github.com/superseriousbusiness/gotosocial/internal/db"
 	"github.com/superseriousbusiness/gotosocial/internal/email"
@@ -57,7 +58,6 @@ type ProcessingStandardTestSuite struct {
 
 	// standard suite models
 	testTokens       map[string]*gtsmodel.Token
-	testClients      map[string]*gtsmodel.Client
 	testApplications map[string]*gtsmodel.Application
 	testUsers        map[string]*gtsmodel.User
 	testAccounts     map[string]*gtsmodel.Account
@@ -66,7 +66,7 @@ type ProcessingStandardTestSuite struct {
 	testStatuses     map[string]*gtsmodel.Status
 	testTags         map[string]*gtsmodel.Tag
 	testMentions     map[string]*gtsmodel.Mention
-	testAutheds      map[string]*oauth.Auth
+	testAutheds      map[string]*apiutil.Auth
 	testBlocks       map[string]*gtsmodel.Block
 	testActivities   map[string]testrig.ActivityWithSignature
 	testLists        map[string]*gtsmodel.List
@@ -76,7 +76,6 @@ type ProcessingStandardTestSuite struct {
 
 func (suite *ProcessingStandardTestSuite) SetupSuite() {
 	suite.testTokens = testrig.NewTestTokens()
-	suite.testClients = testrig.NewTestClients()
 	suite.testApplications = testrig.NewTestApplications()
 	suite.testUsers = testrig.NewTestUsers()
 	suite.testAccounts = testrig.NewTestAccounts()
@@ -85,7 +84,7 @@ func (suite *ProcessingStandardTestSuite) SetupSuite() {
 	suite.testStatuses = testrig.NewTestStatuses()
 	suite.testTags = testrig.NewTestTags()
 	suite.testMentions = testrig.NewTestMentions()
-	suite.testAutheds = map[string]*oauth.Auth{
+	suite.testAutheds = map[string]*apiutil.Auth{
 		"local_account_1": {
 			Application: suite.testApplications["local_account_1"],
 			User:        suite.testUsers["local_account_1"],
@@ -123,7 +122,7 @@ func (suite *ProcessingStandardTestSuite) SetupTest() {
 	suite.transportController = testrig.NewTestTransportController(&suite.state, suite.httpClient)
 	suite.mediaManager = testrig.NewTestMediaManager(&suite.state)
 	suite.federator = testrig.NewTestFederator(&suite.state, suite.transportController, suite.mediaManager)
-	suite.oauthServer = testrig.NewTestOauthServer(suite.db)
+	suite.oauthServer = testrig.NewTestOauthServer(&suite.state)
 	suite.emailSender = testrig.NewEmailSender("../../web/template/", nil)
 
 	suite.processor = processing.NewProcessor(

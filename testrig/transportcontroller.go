@@ -26,9 +26,9 @@ import (
 	"strings"
 	"sync"
 
-	"github.com/superseriousbusiness/activity/pub"
-	"github.com/superseriousbusiness/activity/streams"
-	"github.com/superseriousbusiness/activity/streams/vocab"
+	"codeberg.org/superseriousbusiness/activity/pub"
+	"codeberg.org/superseriousbusiness/activity/streams"
+	"codeberg.org/superseriousbusiness/activity/streams/vocab"
 	"github.com/superseriousbusiness/gotosocial/internal/ap"
 	apimodel "github.com/superseriousbusiness/gotosocial/internal/api/model"
 	"github.com/superseriousbusiness/gotosocial/internal/federation"
@@ -627,7 +627,7 @@ nothanks.com`
   {
     "domain": "bumfaces.net",
     "suspended_at": "2020-05-13T13:29:12.000Z",
-    "public_comment": "big jerks"
+    "comment": "big jerks"
   },
     {
     "domain": "peepee.poopoo",
@@ -640,6 +640,10 @@ nothanks.com`
   }
 ]`
 		jsonRespETag = "\"don't modify me daddy\""
+		allowsResp   = `people.we.like.com
+goodeggs.org
+allowthesefolks.church`
+		allowsRespETag = "\"never change\""
 	)
 
 	switch req.URL.String() {
@@ -716,6 +720,36 @@ nothanks.com`
 		} else {
 			responseBytes = []byte(csvResp)
 			responseContentType = textCSV
+			responseCode = http.StatusOK
+		}
+		responseContentLength = len(responseBytes)
+
+	case "https://lists.example.org/goodies.csv":
+		extraHeaders = map[string]string{
+			"Last-Modified": lastModified,
+			"ETag":          allowsRespETag,
+		}
+		if req.Header.Get("If-None-Match") == allowsRespETag {
+			// Cached.
+			responseCode = http.StatusNotModified
+		} else {
+			responseBytes = []byte(allowsResp)
+			responseContentType = textCSV
+			responseCode = http.StatusOK
+		}
+		responseContentLength = len(responseBytes)
+
+	case "https://lists.example.org/goodies":
+		extraHeaders = map[string]string{
+			"Last-Modified": lastModified,
+			"ETag":          allowsRespETag,
+		}
+		if req.Header.Get("If-None-Match") == allowsRespETag {
+			// Cached.
+			responseCode = http.StatusNotModified
+		} else {
+			responseBytes = []byte(allowsResp)
+			responseContentType = textPlain
 			responseCode = http.StatusOK
 		}
 		responseContentLength = len(responseBytes)

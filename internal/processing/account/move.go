@@ -25,8 +25,10 @@ import (
 	"slices"
 	"time"
 
+	"codeberg.org/gruf/go-byteutil"
 	"github.com/superseriousbusiness/gotosocial/internal/ap"
 	apimodel "github.com/superseriousbusiness/gotosocial/internal/api/model"
+	apiutil "github.com/superseriousbusiness/gotosocial/internal/api/util"
 	"github.com/superseriousbusiness/gotosocial/internal/db"
 	"github.com/superseriousbusiness/gotosocial/internal/federation/dereferencing"
 	"github.com/superseriousbusiness/gotosocial/internal/gtscontext"
@@ -34,14 +36,13 @@ import (
 	"github.com/superseriousbusiness/gotosocial/internal/gtsmodel"
 	"github.com/superseriousbusiness/gotosocial/internal/id"
 	"github.com/superseriousbusiness/gotosocial/internal/messages"
-	"github.com/superseriousbusiness/gotosocial/internal/oauth"
 	"github.com/superseriousbusiness/gotosocial/internal/uris"
 	"golang.org/x/crypto/bcrypt"
 )
 
 func (p *Processor) MoveSelf(
 	ctx context.Context,
-	authed *oauth.Auth,
+	authed *apiutil.Auth,
 	form *apimodel.AccountMoveRequest,
 ) gtserror.WithCode {
 	// Ensure valid MovedToURI.
@@ -70,8 +71,8 @@ func (p *Processor) MoveSelf(
 	}
 
 	if err := bcrypt.CompareHashAndPassword(
-		[]byte(authed.User.EncryptedPassword),
-		[]byte(form.Password),
+		byteutil.S2B(authed.User.EncryptedPassword),
+		byteutil.S2B(form.Password),
 	); err != nil {
 		const text = "invalid password provided in Move request"
 		return gtserror.NewErrorBadRequest(errors.New(text), text)
@@ -119,11 +120,15 @@ func (p *Processor) MoveSelf(
 	unlock := p.state.ProcessingLocks.Lock(lockKey)
 	defer unlock()
 
-	// Ensure we have a valid, up-to-date representation of the target account.
+	// Ensure we have a valid, up-to-date
+	// representation of the target account.
+	//
+	// Match by uri only.
 	targetAcct, targetAcctable, err = p.federator.GetAccountByURI(
 		ctx,
 		originAcct.Username,
 		targetAcctURI,
+		false,
 	)
 	if err != nil {
 		const text = "error dereferencing moved_to_uri"

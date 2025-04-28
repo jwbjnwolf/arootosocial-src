@@ -27,11 +27,10 @@ import (
 	apimodel "github.com/superseriousbusiness/gotosocial/internal/api/model"
 	apiutil "github.com/superseriousbusiness/gotosocial/internal/api/util"
 	"github.com/superseriousbusiness/gotosocial/internal/gtserror"
-	"github.com/superseriousbusiness/gotosocial/internal/oauth"
 	"github.com/superseriousbusiness/gotosocial/internal/util"
 )
 
-// StatusEditPUTHandler swagger:operation PUT /api/v1/statuses statusEdit
+// StatusEditPUTHandler swagger:operation PUT /api/v1/statuses/{id} statusEdit
 //
 // Edit an existing status using the given form field parameters.
 //
@@ -46,6 +45,12 @@ import (
 //	- application/x-www-form-urlencoded
 //
 //	parameters:
+//	-
+//		name: id
+//		type: string
+//		description: Target status ID.
+//		in: path
+//		required: true
 //	-
 //		name: status
 //		x-go-name: Status
@@ -156,9 +161,12 @@ import (
 //		'500':
 //			description: internal server error
 func (m *Module) StatusEditPUTHandler(c *gin.Context) {
-	authed, err := oauth.Authed(c, true, true, true, true)
-	if err != nil {
-		apiutil.ErrorHandler(c, gtserror.NewErrorUnauthorized(err, err.Error()), m.processor.InstanceGetV1)
+	authed, errWithCode := apiutil.TokenAuth(c,
+		true, true, true, true,
+		apiutil.ScopeWriteStatuses,
+	)
+	if errWithCode != nil {
+		apiutil.ErrorHandler(c, errWithCode, m.processor.InstanceGetV1)
 		return
 	}
 

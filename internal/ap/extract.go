@@ -28,8 +28,8 @@ import (
 	"strings"
 	"time"
 
-	"github.com/superseriousbusiness/activity/pub"
-	"github.com/superseriousbusiness/activity/streams/vocab"
+	"codeberg.org/superseriousbusiness/activity/pub"
+	"codeberg.org/superseriousbusiness/activity/streams/vocab"
 	"github.com/superseriousbusiness/gotosocial/internal/gtserror"
 	"github.com/superseriousbusiness/gotosocial/internal/gtsmodel"
 	"github.com/superseriousbusiness/gotosocial/internal/text"
@@ -1078,7 +1078,14 @@ func ExtractInteractionPolicy(
 	statusable Statusable,
 	owner *gtsmodel.Account,
 ) *gtsmodel.InteractionPolicy {
-	policyProp := statusable.GetGoToSocialInteractionPolicy()
+	ipa, ok := statusable.(InteractionPolicyAware)
+	if !ok {
+		// Not a type with interaction
+		// policy properties settable.
+		return nil
+	}
+
+	policyProp := ipa.GetGoToSocialInteractionPolicy()
 	if policyProp == nil || policyProp.Len() != 1 {
 		return nil
 	}

@@ -53,6 +53,7 @@ import (
 	"github.com/superseriousbusiness/gotosocial/internal/messages"
 	"github.com/superseriousbusiness/gotosocial/internal/middleware"
 	"github.com/superseriousbusiness/gotosocial/internal/oauth"
+	"github.com/superseriousbusiness/gotosocial/internal/oauth/handlers"
 	"github.com/superseriousbusiness/gotosocial/internal/observability"
 	"github.com/superseriousbusiness/gotosocial/internal/oidc"
 	"github.com/superseriousbusiness/gotosocial/internal/processing"
@@ -273,7 +274,14 @@ var Start action.GTSAction = func(ctx context.Context) error {
 
 	// Build handlers used in later initializations.
 	mediaManager := media.NewManager(state)
-	oauthServer := oauth.New(ctx, dbService)
+	oauthServer := oauth.New(ctx, state,
+		handlers.GetValidateURIHandler(ctx),
+		handlers.GetClientScopeHandler(ctx, state),
+		handlers.GetAuthorizeScopeHandler(),
+		handlers.GetInternalErrorHandler(ctx),
+		handlers.GetResponseErrorHandler(ctx),
+		handlers.GetUserAuthorizationHandler(),
+	)
 	typeConverter := typeutils.NewConverter(state)
 	visFilter := visibility.NewFilter(state)
 	intFilter := interaction.NewFilter(state)
@@ -507,25 +515,26 @@ var Start action.GTSAction = func(ctx context.Context) error {
 	}
 
 	var (
-		authModule        = api.NewAuth(dbService, process, idp, routerSession, sessionName) // auth/oauth paths
-		clientModule      = api.NewClient(state, process)                                    // api client endpoints
-		metricsModule     = api.NewMetrics()                                                 // Metrics endpoints
-		healthModule      = api.NewHealth(dbService.Ready)                                   // Health check endpoints
-		fileserverModule  = api.NewFileserver(process)                                       // fileserver endpoints
-		robotsModule      = api.NewRobots()                                                  // robots.txt endpoint
-		wellKnownModule   = api.NewWellKnown(process)                                        // .well-known endpoints
-		nodeInfoModule    = api.NewNodeInfo(process)                                         // nodeinfo endpoint
-		activityPubModule = api.NewActivityPub(dbService, process)                           // ActivityPub endpoints
-		webModule         = web.New(dbService, process)                                      // web pages + user profiles + settings panels etc
+		authModule        = api.NewAuth(state, process, idp, routerSession, sessionName) // auth/oauth paths
+		clientModule      = api.NewClient(state, process)                                // api client endpoints
+		metricsModule     = api.NewMetrics()                                             // Metrics endpoints
+		healthModule      = api.NewHealth(dbService.Ready)                               // Health check endpoints
+		fileserverModule  = api.NewFileserver(process)                                   // fileserver endpoints
+		robotsModule      = api.NewRobots()                                              // robots.txt endpoint
+		wellKnownModule   = api.NewWellKnown(process)                                    // .well-known endpoints
+		nodeInfoModule    = api.NewNodeInfo(process)                                     // nodeinfo endpoint
+		activityPubModule = api.NewActivityPub(dbService, process)                       // ActivityPub endpoints
+		webModule         = web.New(dbService, process)                                  // web pages + user profiles + settings panels etc
 	)
 
 	// Create per-route / per-grouping middlewares.
 	// rate limiting
 	rlLimit := config.GetAdvancedRateLimitRequests()
-	clLimit := middleware.RateLimit(rlLimit, config.GetAdvancedRateLimitExceptionsParsed())        // client api
-	s2sLimit := middleware.RateLimit(rlLimit, config.GetAdvancedRateLimitExceptionsParsed())       // server-to-server (AP)
-	fsMainLimit := middleware.RateLimit(rlLimit, config.GetAdvancedRateLimitExceptionsParsed())    // fileserver / web templates
-	fsEmojiLimit := middleware.RateLimit(rlLimit*2, config.GetAdvancedRateLimitExceptionsParsed()) // fileserver (emojis only, use high limit)
+	exceptions := config.GetAdvancedRateLimitExceptions()
+	clLimit := middleware.RateLimit(rlLimit, exceptions)        // client api
+	s2sLimit := middleware.RateLimit(rlLimit, exceptions)       // server-to-server (AP)
+	fsMainLimit := middleware.RateLimit(rlLimit, exceptions)    // fileserver / web templates
+	fsEmojiLimit := middleware.RateLimit(rlLimit*2, exceptions) // fileserver (emojis only, use high limit)
 
 	// throttling
 	cpuMultiplier := config.GetAdvancedThrottlingMultiplier()

@@ -30,7 +30,6 @@ import (
 	"testing"
 
 	"github.com/stretchr/testify/suite"
-	"github.com/superseriousbusiness/gotosocial/internal/ap"
 	apiutil "github.com/superseriousbusiness/gotosocial/internal/api/util"
 	"github.com/superseriousbusiness/gotosocial/internal/api/wellknown/webfinger"
 	"github.com/superseriousbusiness/gotosocial/internal/cleaner"
@@ -94,7 +93,7 @@ func (suite *WebfingerGetTestSuite) funkifyAccountDomain(host string, accountDom
 		subscriptions.New(&suite.state, suite.federator.TransportController(), suite.tc),
 		suite.tc,
 		suite.federator,
-		testrig.NewTestOauthServer(suite.db),
+		testrig.NewTestOauthServer(&suite.state),
 		testrig.NewTestMediaManager(&suite.state),
 		&suite.state,
 		suite.emailSender,
@@ -124,7 +123,7 @@ func (suite *WebfingerGetTestSuite) funkifyAccountDomain(host string, accountDom
 		FollowingURI:          "http://" + host + "/users/new_account_domain_user/following",
 		FollowersURI:          "http://" + host + "/users/new_account_domain_user/followers",
 		FeaturedCollectionURI: "http://" + host + "/users/new_account_domain_user/collections/featured",
-		ActorType:             ap.ActorPerson,
+		ActorType:             gtsmodel.AccountActorTypePerson,
 		PrivateKey:            privateKey,
 		PublicKey:             publicKey,
 		PublicKeyURI:          "http://" + host + "/users/new_account_domain_user/main-key",

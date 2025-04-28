@@ -28,11 +28,11 @@ import (
 	"testing"
 	"time"
 
+	"codeberg.org/superseriousbusiness/activity/pub"
+	"codeberg.org/superseriousbusiness/activity/streams"
+	"codeberg.org/superseriousbusiness/activity/streams/vocab"
 	"github.com/gin-gonic/gin"
 	"github.com/stretchr/testify/suite"
-	"github.com/superseriousbusiness/activity/pub"
-	"github.com/superseriousbusiness/activity/streams"
-	"github.com/superseriousbusiness/activity/streams/vocab"
 	"github.com/superseriousbusiness/gotosocial/internal/ap"
 	"github.com/superseriousbusiness/gotosocial/internal/api/activitypub/users"
 	"github.com/superseriousbusiness/gotosocial/internal/db"
@@ -376,10 +376,9 @@ func (suite *InboxPostTestSuite) TestPostUpdate() {
 	suite.EqualValues(requestingAccount.HeaderMediaAttachment, dbUpdatedAccount.HeaderMediaAttachment)
 	suite.EqualValues(requestingAccount.HeaderRemoteURL, dbUpdatedAccount.HeaderRemoteURL)
 	suite.EqualValues(requestingAccount.Note, dbUpdatedAccount.Note)
-	suite.EqualValues(requestingAccount.Memorial, dbUpdatedAccount.Memorial)
+	suite.EqualValues(requestingAccount.MemorializedAt, dbUpdatedAccount.MemorializedAt)
 	suite.EqualValues(requestingAccount.AlsoKnownAsURIs, dbUpdatedAccount.AlsoKnownAsURIs)
 	suite.EqualValues(requestingAccount.MovedToURI, dbUpdatedAccount.MovedToURI)
-	suite.EqualValues(requestingAccount.Bot, dbUpdatedAccount.Bot)
 	suite.EqualValues(requestingAccount.Locked, dbUpdatedAccount.Locked)
 	suite.EqualValues(requestingAccount.Discoverable, dbUpdatedAccount.Discoverable)
 	suite.EqualValues(requestingAccount.URI, dbUpdatedAccount.URI)

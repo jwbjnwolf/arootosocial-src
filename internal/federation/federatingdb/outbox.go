@@ -21,8 +21,8 @@ import (
 	"context"
 	"net/url"
 
-	"github.com/superseriousbusiness/activity/streams"
-	"github.com/superseriousbusiness/activity/streams/vocab"
+	"codeberg.org/superseriousbusiness/activity/streams"
+	"codeberg.org/superseriousbusiness/activity/streams/vocab"
 )
 
 // GetOutbox returns the first ordered collection page of the outbox
@@ -46,12 +46,12 @@ func (f *federatingDB) SetOutbox(ctx context.Context, outbox vocab.ActivityStrea
 	return nil
 }
 
-// OutboxForInbox fetches the corresponding actor's outbox IRI for the
+// OutboxForInbox fetches the corresponding local actor's outbox IRI for the
 // actor's inbox IRI.
 //
 // The library makes this call only after acquiring a lock first.
 func (f *federatingDB) OutboxForInbox(ctx context.Context, inboxIRI *url.URL) (outboxIRI *url.URL, err error) {
-	acct, err := f.getAccountForIRI(ctx, inboxIRI)
+	acct, err := f.state.DB.GetOneAccountByInboxURI(ctx, inboxIRI.String())
 	if err != nil {
 		return nil, err
 	}

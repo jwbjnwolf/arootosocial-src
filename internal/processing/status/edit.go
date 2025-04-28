@@ -84,11 +84,14 @@ func (p *Processor) Edit(
 		return nil, errWithCode
 	}
 
+	// Process incoming content type.
+	contentType := processContentType(form.ContentType, status, requester.Settings.StatusContentType)
+
 	// Process incoming status edit content fields.
 	content, errWithCode := p.processContent(ctx,
 		requester,
 		statusID,
-		string(form.ContentType),
+		contentType,
 		form.Status,
 		form.SpoilerText,
 		form.Language,
@@ -256,6 +259,7 @@ func (p *Processor) Edit(
 	edit.Content = status.Content
 	edit.ContentWarning = status.ContentWarning
 	edit.Text = status.Text
+	edit.ContentType = status.ContentType
 	edit.Language = status.Language
 	edit.Sensitive = status.Sensitive
 	edit.StatusID = status.ID
@@ -297,12 +301,20 @@ func (p *Processor) Edit(
 	// update the other necessary status fields.
 	status.Content = content.Content
 	status.ContentWarning = content.ContentWarning
-	status.Text = form.Status
+	status.Text = form.Status // raw
+	status.ContentType = contentType
 	status.Language = content.Language
 	status.Sensitive = &form.Sensitive
 	status.AttachmentIDs = form.MediaIDs
 	status.Attachments = media
 	status.EditedAt = now
+
+	// Only store ContentWarningText if the parsed
+	// result is different from the given SpoilerText,
+	// otherwise skip to avoid duplicating db columns.
+	if content.ContentWarning != form.SpoilerText {
+		status.ContentWarningText = form.SpoilerText
+	}
 
 	if poll != nil {
 		// Set relevent fields for latest with poll.

@@ -24,7 +24,7 @@ codeberg.org/gruf/go-fastcopy
 # codeberg.org/gruf/go-fastpath/v2 v2.0.0
 ## explicit; go 1.14
 codeberg.org/gruf/go-fastpath/v2
-# codeberg.org/gruf/go-ffmpreg v0.6.6
+# codeberg.org/gruf/go-ffmpreg v0.6.7
 ## explicit; go 1.22.0
 codeberg.org/gruf/go-ffmpreg/embed
 codeberg.org/gruf/go-ffmpreg/wasm
@@ -38,7 +38,7 @@ codeberg.org/gruf/go-kv/format
 # codeberg.org/gruf/go-list v0.0.0-20240425093752-494db03d641f
 ## explicit; go 1.21.3
 codeberg.org/gruf/go-list
-# codeberg.org/gruf/go-mangler v1.4.1
+# codeberg.org/gruf/go-mangler v1.4.4
 ## explicit; go 1.19
 codeberg.org/gruf/go-mangler
 # codeberg.org/gruf/go-maps v1.0.4
@@ -47,7 +47,7 @@ codeberg.org/gruf/go-maps
 # codeberg.org/gruf/go-mempool v0.0.0-20240507125005-cef10d64a760
 ## explicit; go 1.22.2
 codeberg.org/gruf/go-mempool
-# codeberg.org/gruf/go-mutexes v1.5.1
+# codeberg.org/gruf/go-mutexes v1.5.2
 ## explicit; go 1.22.2
 codeberg.org/gruf/go-mutexes
 # codeberg.org/gruf/go-runners v1.6.3
@@ -63,12 +63,212 @@ codeberg.org/gruf/go-storage/disk
 codeberg.org/gruf/go-storage/internal
 codeberg.org/gruf/go-storage/memory
 codeberg.org/gruf/go-storage/s3
-# codeberg.org/gruf/go-structr v0.8.11
-## explicit; go 1.21
+# codeberg.org/gruf/go-structr v0.9.6
+## explicit; go 1.22
 codeberg.org/gruf/go-structr
-# codeberg.org/superseriousbusiness/exif-terminator v0.9.1
+# codeberg.org/superseriousbusiness/activity v1.13.0-gts
+## explicit; go 1.21
+codeberg.org/superseriousbusiness/activity/pub
+codeberg.org/superseriousbusiness/activity/streams
+codeberg.org/superseriousbusiness/activity/streams/impl/activitystreams/property_accuracy
+codeberg.org/superseriousbusiness/activity/streams/impl/activitystreams/property_actor
+codeberg.org/superseriousbusiness/activity/streams/impl/activitystreams/property_alsoknownas
+codeberg.org/superseriousbusiness/activity/streams/impl/activitystreams/property_altitude
+codeberg.org/superseriousbusiness/activity/streams/impl/activitystreams/property_anyof
+codeberg.org/superseriousbusiness/activity/streams/impl/activitystreams/property_attachment
+codeberg.org/superseriousbusiness/activity/streams/impl/activitystreams/property_attributedto
+codeberg.org/superseriousbusiness/activity/streams/impl/activitystreams/property_audience
+codeberg.org/superseriousbusiness/activity/streams/impl/activitystreams/property_bcc
+codeberg.org/superseriousbusiness/activity/streams/impl/activitystreams/property_bto
+codeberg.org/superseriousbusiness/activity/streams/impl/activitystreams/property_cc
+codeberg.org/superseriousbusiness/activity/streams/impl/activitystreams/property_closed
+codeberg.org/superseriousbusiness/activity/streams/impl/activitystreams/property_content
+codeberg.org/superseriousbusiness/activity/streams/impl/activitystreams/property_context
+codeberg.org/superseriousbusiness/activity/streams/impl/activitystreams/property_current
+codeberg.org/superseriousbusiness/activity/streams/impl/activitystreams/property_deleted
+codeberg.org/superseriousbusiness/activity/streams/impl/activitystreams/property_describes
+codeberg.org/superseriousbusiness/activity/streams/impl/activitystreams/property_duration
+codeberg.org/superseriousbusiness/activity/streams/impl/activitystreams/property_endpoints
+codeberg.org/superseriousbusiness/activity/streams/impl/activitystreams/property_endtime
+codeberg.org/superseriousbusiness/activity/streams/impl/activitystreams/property_first
+codeberg.org/superseriousbusiness/activity/streams/impl/activitystreams/property_followers
+codeberg.org/superseriousbusiness/activity/streams/impl/activitystreams/property_following
+codeberg.org/superseriousbusiness/activity/streams/impl/activitystreams/property_formertype
+codeberg.org/superseriousbusiness/activity/streams/impl/activitystreams/property_generator
+codeberg.org/superseriousbusiness/activity/streams/impl/activitystreams/property_height
+codeberg.org/superseriousbusiness/activity/streams/impl/activitystreams/property_href
+codeberg.org/superseriousbusiness/activity/streams/impl/activitystreams/property_hreflang
+codeberg.org/superseriousbusiness/activity/streams/impl/activitystreams/property_icon
+codeberg.org/superseriousbusiness/activity/streams/impl/activitystreams/property_image
+codeberg.org/superseriousbusiness/activity/streams/impl/activitystreams/property_inbox
+codeberg.org/superseriousbusiness/activity/streams/impl/activitystreams/property_inreplyto
+codeberg.org/superseriousbusiness/activity/streams/impl/activitystreams/property_instrument
+codeberg.org/superseriousbusiness/activity/streams/impl/activitystreams/property_items
+codeberg.org/superseriousbusiness/activity/streams/impl/activitystreams/property_last
+codeberg.org/superseriousbusiness/activity/streams/impl/activitystreams/property_latitude
+codeberg.org/superseriousbusiness/activity/streams/impl/activitystreams/property_liked
+codeberg.org/superseriousbusiness/activity/streams/impl/activitystreams/property_likes
+codeberg.org/superseriousbusiness/activity/streams/impl/activitystreams/property_location
+codeberg.org/superseriousbusiness/activity/streams/impl/activitystreams/property_longitude
+codeberg.org/superseriousbusiness/activity/streams/impl/activitystreams/property_manuallyapprovesfollowers
+codeberg.org/superseriousbusiness/activity/streams/impl/activitystreams/property_mediatype
+codeberg.org/superseriousbusiness/activity/streams/impl/activitystreams/property_movedto
+codeberg.org/superseriousbusiness/activity/streams/impl/activitystreams/property_name
+codeberg.org/superseriousbusiness/activity/streams/impl/activitystreams/property_next
+codeberg.org/superseriousbusiness/activity/streams/impl/activitystreams/property_object
+codeberg.org/superseriousbusiness/activity/streams/impl/activitystreams/property_oneof
+codeberg.org/superseriousbusiness/activity/streams/impl/activitystreams/property_ordereditems
+codeberg.org/superseriousbusiness/activity/streams/impl/activitystreams/property_origin
+codeberg.org/superseriousbusiness/activity/streams/impl/activitystreams/property_outbox
+codeberg.org/superseriousbusiness/activity/streams/impl/activitystreams/property_partof
+codeberg.org/superseriousbusiness/activity/streams/impl/activitystreams/property_preferredusername
+codeberg.org/superseriousbusiness/activity/streams/impl/activitystreams/property_prev
+codeberg.org/superseriousbusiness/activity/streams/impl/activitystreams/property_preview
+codeberg.org/superseriousbusiness/activity/streams/impl/activitystreams/property_published
+codeberg.org/superseriousbusiness/activity/streams/impl/activitystreams/property_radius
+codeberg.org/superseriousbusiness/activity/streams/impl/activitystreams/property_rel
+codeberg.org/superseriousbusiness/activity/streams/impl/activitystreams/property_relationship
+codeberg.org/superseriousbusiness/activity/streams/impl/activitystreams/property_replies
+codeberg.org/superseriousbusiness/activity/streams/impl/activitystreams/property_result
+codeberg.org/superseriousbusiness/activity/streams/impl/activitystreams/property_sensitive
+codeberg.org/superseriousbusiness/activity/streams/impl/activitystreams/property_sharedinbox
+codeberg.org/superseriousbusiness/activity/streams/impl/activitystreams/property_shares
+codeberg.org/superseriousbusiness/activity/streams/impl/activitystreams/property_source
+codeberg.org/superseriousbusiness/activity/streams/impl/activitystreams/property_startindex
+codeberg.org/superseriousbusiness/activity/streams/impl/activitystreams/property_starttime
+codeberg.org/superseriousbusiness/activity/streams/impl/activitystreams/property_streams
+codeberg.org/superseriousbusiness/activity/streams/impl/activitystreams/property_subject
+codeberg.org/superseriousbusiness/activity/streams/impl/activitystreams/property_summary
+codeberg.org/superseriousbusiness/activity/streams/impl/activitystreams/property_tag
+codeberg.org/superseriousbusiness/activity/streams/impl/activitystreams/property_target
+codeberg.org/superseriousbusiness/activity/streams/impl/activitystreams/property_to
+codeberg.org/superseriousbusiness/activity/streams/impl/activitystreams/property_totalitems
+codeberg.org/superseriousbusiness/activity/streams/impl/activitystreams/property_units
+codeberg.org/superseriousbusiness/activity/streams/impl/activitystreams/property_updated
+codeberg.org/superseriousbusiness/activity/streams/impl/activitystreams/property_url
+codeberg.org/superseriousbusiness/activity/streams/impl/activitystreams/property_width
+codeberg.org/superseriousbusiness/activity/streams/impl/activitystreams/type_accept
+codeberg.org/superseriousbusiness/activity/streams/impl/activitystreams/type_activity
+codeberg.org/superseriousbusiness/activity/streams/impl/activitystreams/type_add
+codeberg.org/superseriousbusiness/activity/streams/impl/activitystreams/type_announce
+codeberg.org/superseriousbusiness/activity/streams/impl/activitystreams/type_application
+codeberg.org/superseriousbusiness/activity/streams/impl/activitystreams/type_arrive
+codeberg.org/superseriousbusiness/activity/streams/impl/activitystreams/type_article
+codeberg.org/superseriousbusiness/activity/streams/impl/activitystreams/type_audio
+codeberg.org/superseriousbusiness/activity/streams/impl/activitystreams/type_block
+codeberg.org/superseriousbusiness/activity/streams/impl/activitystreams/type_collection
+codeberg.org/superseriousbusiness/activity/streams/impl/activitystreams/type_collectionpage
+codeberg.org/superseriousbusiness/activity/streams/impl/activitystreams/type_create
+codeberg.org/superseriousbusiness/activity/streams/impl/activitystreams/type_delete
+codeberg.org/superseriousbusiness/activity/streams/impl/activitystreams/type_dislike
+codeberg.org/superseriousbusiness/activity/streams/impl/activitystreams/type_document
+codeberg.org/superseriousbusiness/activity/streams/impl/activitystreams/type_endpoints
+codeberg.org/superseriousbusiness/activity/streams/impl/activitystreams/type_event
+codeberg.org/superseriousbusiness/activity/streams/impl/activitystreams/type_flag
+codeberg.org/superseriousbusiness/activity/streams/impl/activitystreams/type_follow
+codeberg.org/superseriousbusiness/activity/streams/impl/activitystreams/type_group
+codeberg.org/superseriousbusiness/activity/streams/impl/activitystreams/type_ignore
+codeberg.org/superseriousbusiness/activity/streams/impl/activitystreams/type_image
+codeberg.org/superseriousbusiness/activity/streams/impl/activitystreams/type_intransitiveactivity
+codeberg.org/superseriousbusiness/activity/streams/impl/activitystreams/type_invite
+codeberg.org/superseriousbusiness/activity/streams/impl/activitystreams/type_join
+codeberg.org/superseriousbusiness/activity/streams/impl/activitystreams/type_leave
+codeberg.org/superseriousbusiness/activity/streams/impl/activitystreams/type_like
+codeberg.org/superseriousbusiness/activity/streams/impl/activitystreams/type_link
+codeberg.org/superseriousbusiness/activity/streams/impl/activitystreams/type_listen
+codeberg.org/superseriousbusiness/activity/streams/impl/activitystreams/type_mention
+codeberg.org/superseriousbusiness/activity/streams/impl/activitystreams/type_move
+codeberg.org/superseriousbusiness/activity/streams/impl/activitystreams/type_note
+codeberg.org/superseriousbusiness/activity/streams/impl/activitystreams/type_object
+codeberg.org/superseriousbusiness/activity/streams/impl/activitystreams/type_offer
+codeberg.org/superseriousbusiness/activity/streams/impl/activitystreams/type_orderedcollection
+codeberg.org/superseriousbusiness/activity/streams/impl/activitystreams/type_orderedcollectionpage
+codeberg.org/superseriousbusiness/activity/streams/impl/activitystreams/type_organization
+codeberg.org/superseriousbusiness/activity/streams/impl/activitystreams/type_page
+codeberg.org/superseriousbusiness/activity/streams/impl/activitystreams/type_person
+codeberg.org/superseriousbusiness/activity/streams/impl/activitystreams/type_place
+codeberg.org/superseriousbusiness/activity/streams/impl/activitystreams/type_profile
+codeberg.org/superseriousbusiness/activity/streams/impl/activitystreams/type_question
+codeberg.org/superseriousbusiness/activity/streams/impl/activitystreams/type_read
+codeberg.org/superseriousbusiness/activity/streams/impl/activitystreams/type_reject
+codeberg.org/superseriousbusiness/activity/streams/impl/activitystreams/type_relationship
+codeberg.org/superseriousbusiness/activity/streams/impl/activitystreams/type_remove
+codeberg.org/superseriousbusiness/activity/streams/impl/activitystreams/type_service
+codeberg.org/superseriousbusiness/activity/streams/impl/activitystreams/type_tentativeaccept
+codeberg.org/superseriousbusiness/activity/streams/impl/activitystreams/type_tentativereject
+codeberg.org/superseriousbusiness/activity/streams/impl/activitystreams/type_tombstone
+codeberg.org/superseriousbusiness/activity/streams/impl/activitystreams/type_travel
+codeberg.org/superseriousbusiness/activity/streams/impl/activitystreams/type_undo
+codeberg.org/superseriousbusiness/activity/streams/impl/activitystreams/type_update
+codeberg.org/superseriousbusiness/activity/streams/impl/activitystreams/type_video
+codeberg.org/superseriousbusiness/activity/streams/impl/activitystreams/type_view
+codeberg.org/superseriousbusiness/activity/streams/impl/funkwhale/type_album
+codeberg.org/superseriousbusiness/activity/streams/impl/funkwhale/type_artist
+codeberg.org/superseriousbusiness/activity/streams/impl/funkwhale/type_library
+codeberg.org/superseriousbusiness/activity/streams/impl/funkwhale/type_track
+codeberg.org/superseriousbusiness/activity/streams/impl/gotosocial/property_always
+codeberg.org/superseriousbusiness/activity/streams/impl/gotosocial/property_approvalrequired
+codeberg.org/superseriousbusiness/activity/streams/impl/gotosocial/property_approvedby
+codeberg.org/superseriousbusiness/activity/streams/impl/gotosocial/property_canannounce
+codeberg.org/superseriousbusiness/activity/streams/impl/gotosocial/property_canlike
+codeberg.org/superseriousbusiness/activity/streams/impl/gotosocial/property_canreply
+codeberg.org/superseriousbusiness/activity/streams/impl/gotosocial/property_interactionpolicy
+codeberg.org/superseriousbusiness/activity/streams/impl/gotosocial/type_announceapproval
+codeberg.org/superseriousbusiness/activity/streams/impl/gotosocial/type_canannounce
+codeberg.org/superseriousbusiness/activity/streams/impl/gotosocial/type_canlike
+codeberg.org/superseriousbusiness/activity/streams/impl/gotosocial/type_canreply
+codeberg.org/superseriousbusiness/activity/streams/impl/gotosocial/type_interactionpolicy
+codeberg.org/superseriousbusiness/activity/streams/impl/gotosocial/type_likeapproval
+codeberg.org/superseriousbusiness/activity/streams/impl/gotosocial/type_replyapproval
+codeberg.org/superseriousbusiness/activity/streams/impl/jsonld/property_id
+codeberg.org/superseriousbusiness/activity/streams/impl/jsonld/property_type
+codeberg.org/superseriousbusiness/activity/streams/impl/schema/property_value
+codeberg.org/superseriousbusiness/activity/streams/impl/schema/type_propertyvalue
+codeberg.org/superseriousbusiness/activity/streams/impl/toot/property_blurhash
+codeberg.org/superseriousbusiness/activity/streams/impl/toot/property_discoverable
+codeberg.org/superseriousbusiness/activity/streams/impl/toot/property_featured
+codeberg.org/superseriousbusiness/activity/streams/impl/toot/property_signaturealgorithm
+codeberg.org/superseriousbusiness/activity/streams/impl/toot/property_signaturevalue
+codeberg.org/superseriousbusiness/activity/streams/impl/toot/property_voterscount
+codeberg.org/superseriousbusiness/activity/streams/impl/toot/type_emoji
+codeberg.org/superseriousbusiness/activity/streams/impl/toot/type_hashtag
+codeberg.org/superseriousbusiness/activity/streams/impl/toot/type_identityproof
+codeberg.org/superseriousbusiness/activity/streams/impl/w3idsecurityv1/property_owner
+codeberg.org/superseriousbusiness/activity/streams/impl/w3idsecurityv1/property_publickey
+codeberg.org/superseriousbusiness/activity/streams/impl/w3idsecurityv1/property_publickeypem
+codeberg.org/superseriousbusiness/activity/streams/impl/w3idsecurityv1/type_publickey
+codeberg.org/superseriousbusiness/activity/streams/values/anyURI
+codeberg.org/superseriousbusiness/activity/streams/values/bcp47
+codeberg.org/superseriousbusiness/activity/streams/values/boolean
+codeberg.org/superseriousbusiness/activity/streams/values/dateTime
+codeberg.org/superseriousbusiness/activity/streams/values/duration
+codeberg.org/superseriousbusiness/activity/streams/values/float
+codeberg.org/superseriousbusiness/activity/streams/values/langString
+codeberg.org/superseriousbusiness/activity/streams/values/nonNegativeInteger
+codeberg.org/superseriousbusiness/activity/streams/values/rfc2045
+codeberg.org/superseriousbusiness/activity/streams/values/rfc5988
+codeberg.org/superseriousbusiness/activity/streams/values/string
+codeberg.org/superseriousbusiness/activity/streams/vocab
+# codeberg.org/superseriousbusiness/exif-terminator v0.10.0
 ## explicit; go 1.21
 codeberg.org/superseriousbusiness/exif-terminator
+# codeberg.org/superseriousbusiness/go-jpeg-image-structure/v2 v2.1.0-SSB
+## explicit; go 1.17
+codeberg.org/superseriousbusiness/go-jpeg-image-structure/v2
+# codeberg.org/superseriousbusiness/go-png-image-structure/v2 v2.1.0-SSB
+## explicit; go 1.12
+codeberg.org/superseriousbusiness/go-png-image-structure/v2
+# codeberg.org/superseriousbusiness/httpsig v1.3.0-SSB
+## explicit; go 1.21
+codeberg.org/superseriousbusiness/httpsig
+# codeberg.org/superseriousbusiness/oauth2/v4 v4.7.0-SSB
+## explicit; go 1.23.0
+codeberg.org/superseriousbusiness/oauth2/v4
+codeberg.org/superseriousbusiness/oauth2/v4/errors
+codeberg.org/superseriousbusiness/oauth2/v4/generates
+codeberg.org/superseriousbusiness/oauth2/v4/manage
+codeberg.org/superseriousbusiness/oauth2/v4/models
+codeberg.org/superseriousbusiness/oauth2/v4/server
 # github.com/DmitriyVTitov/size v1.5.0
 ## explicit; go 1.14
 github.com/DmitriyVTitov/size
@@ -97,18 +297,23 @@ github.com/aymerick/douceur/parser
 # github.com/beorn7/perks v1.0.1
 ## explicit; go 1.11
 github.com/beorn7/perks/quantile
+# github.com/boombuler/barcode v1.0.1-0.20190219062509-6c824513bacc
+## explicit
+github.com/boombuler/barcode
+github.com/boombuler/barcode/qr
+github.com/boombuler/barcode/utils
 # github.com/buckket/go-blurhash v1.1.0
 ## explicit; go 1.14
 github.com/buckket/go-blurhash
 github.com/buckket/go-blurhash/base83
-# github.com/bytedance/sonic v1.12.7
+# github.com/bytedance/sonic v1.13.2
 ## explicit; go 1.17
 github.com/bytedance/sonic
 github.com/bytedance/sonic/ast
 github.com/bytedance/sonic/decoder
 github.com/bytedance/sonic/encoder
-github.com/bytedance/sonic/internal/base64
 github.com/bytedance/sonic/internal/caching
+github.com/bytedance/sonic/internal/compat
 github.com/bytedance/sonic/internal/cpu
 github.com/bytedance/sonic/internal/decoder/api
 github.com/bytedance/sonic/internal/decoder/consts
@@ -135,7 +340,7 @@ github.com/bytedance/sonic/internal/utils
 github.com/bytedance/sonic/option
 github.com/bytedance/sonic/unquote
 github.com/bytedance/sonic/utf8
-# github.com/bytedance/sonic/loader v0.2.2
+# github.com/bytedance/sonic/loader v0.2.4
 ## explicit; go 1.16
 github.com/bytedance/sonic/loader
 github.com/bytedance/sonic/loader/internal/abi
@@ -148,9 +353,13 @@ github.com/cenkalti/backoff/v4
 # github.com/cespare/xxhash/v2 v2.3.0
 ## explicit; go 1.11
 github.com/cespare/xxhash/v2
-# github.com/cloudwego/base64x v0.1.4
+# github.com/cloudwego/base64x v0.1.5
 ## explicit; go 1.16
 github.com/cloudwego/base64x
+github.com/cloudwego/base64x/internal/native
+github.com/cloudwego/base64x/internal/native/avx2
+github.com/cloudwego/base64x/internal/native/sse
+github.com/cloudwego/base64x/internal/rt
 # github.com/coreos/go-oidc/v3 v3.12.0
 ## explicit; go 1.21
 github.com/coreos/go-oidc/v3/oidc
@@ -191,14 +400,14 @@ github.com/gabriel-vasile/mimetype
 github.com/gabriel-vasile/mimetype/internal/charset
 github.com/gabriel-vasile/mimetype/internal/json
 github.com/gabriel-vasile/mimetype/internal/magic
-# github.com/gin-contrib/cors v1.7.3
-## explicit; go 1.21.0
+# github.com/gin-contrib/cors v1.7.4
+## explicit; go 1.23.0
 github.com/gin-contrib/cors
-# github.com/gin-contrib/gzip v1.2.2
-## explicit; go 1.21.0
+# github.com/gin-contrib/gzip v1.2.3
+## explicit; go 1.23.0
 github.com/gin-contrib/gzip
-# github.com/gin-contrib/sessions v1.0.2
-## explicit; go 1.20
+# github.com/gin-contrib/sessions v1.0.3
+## explicit; go 1.23.0
 github.com/gin-contrib/sessions
 github.com/gin-contrib/sessions/memstore
 # github.com/gin-contrib/sse v1.0.0
@@ -289,10 +498,10 @@ github.com/go-playground/locales/currency
 # github.com/go-playground/universal-translator v0.18.1
 ## explicit; go 1.18
 github.com/go-playground/universal-translator
-# github.com/go-playground/validator/v10 v10.24.0
+# github.com/go-playground/validator/v10 v10.26.0
 ## explicit; go 1.20
 github.com/go-playground/validator/v10
-# github.com/go-swagger/go-swagger v0.31.0 => github.com/superseriousbusiness/go-swagger v0.31.0-gts-go1.23-fix
+# github.com/go-swagger/go-swagger v0.31.0 => codeberg.org/superseriousbusiness/go-swagger v0.31.0-gts-go1.23-fix
 ## explicit; go 1.21
 github.com/go-swagger/go-swagger/cmd/swagger
 github.com/go-swagger/go-swagger/cmd/swagger/commands
@@ -301,6 +510,10 @@ github.com/go-swagger/go-swagger/cmd/swagger/commands/generate
 github.com/go-swagger/go-swagger/cmd/swagger/commands/initcmd
 github.com/go-swagger/go-swagger/codescan
 github.com/go-swagger/go-swagger/generator
+# github.com/go-viper/mapstructure/v2 v2.2.1
+## explicit; go 1.18
+github.com/go-viper/mapstructure/v2
+github.com/go-viper/mapstructure/v2/internal/errors
 # github.com/go-xmlfmt/xmlfmt v0.0.0-20191208150333-d5b6f63a941b
 ## explicit
 github.com/go-xmlfmt/xmlfmt
@@ -318,7 +531,7 @@ github.com/goccy/go-json/internal/runtime
 # github.com/golang-jwt/jwt v3.2.2+incompatible
 ## explicit
 github.com/golang-jwt/jwt
-# github.com/golang-jwt/jwt/v5 v5.2.1
+# github.com/golang-jwt/jwt/v5 v5.2.2
 ## explicit; go 1.18
 github.com/golang-jwt/jwt/v5
 # github.com/golang/geo v0.0.0-20200319012246-673a6f80352d
@@ -353,29 +566,17 @@ github.com/gorilla/handlers
 # github.com/gorilla/securecookie v1.1.2
 ## explicit; go 1.20
 github.com/gorilla/securecookie
-# github.com/gorilla/sessions v1.2.2
-## explicit; go 1.20
+# github.com/gorilla/sessions v1.4.0
+## explicit; go 1.23
 github.com/gorilla/sessions
 # github.com/gorilla/websocket v1.5.3
 ## explicit; go 1.12
 github.com/gorilla/websocket
-# github.com/grpc-ecosystem/grpc-gateway/v2 v2.25.1
-## explicit; go 1.22.0
+# github.com/grpc-ecosystem/grpc-gateway/v2 v2.26.1
+## explicit; go 1.22
 github.com/grpc-ecosystem/grpc-gateway/v2/internal/httprule
 github.com/grpc-ecosystem/grpc-gateway/v2/runtime
 github.com/grpc-ecosystem/grpc-gateway/v2/utilities
-# github.com/hashicorp/hcl v1.0.0
-## explicit
-github.com/hashicorp/hcl
-github.com/hashicorp/hcl/hcl/ast
-github.com/hashicorp/hcl/hcl/parser
-github.com/hashicorp/hcl/hcl/printer
-github.com/hashicorp/hcl/hcl/scanner
-github.com/hashicorp/hcl/hcl/strconv
-github.com/hashicorp/hcl/hcl/token
-github.com/hashicorp/hcl/json/parser
-github.com/hashicorp/hcl/json/scanner
-github.com/hashicorp/hcl/json/token
 # github.com/huandu/xstrings v1.4.0
 ## explicit; go 1.12
 github.com/huandu/xstrings
@@ -391,7 +592,7 @@ github.com/jackc/pgpassfile
 # github.com/jackc/pgservicefile v0.0.0-20240606120523-5a60cdf6a761
 ## explicit; go 1.14
 github.com/jackc/pgservicefile
-# github.com/jackc/pgx/v5 v5.7.2
+# github.com/jackc/pgx/v5 v5.7.4
 ## explicit; go 1.21
 github.com/jackc/pgx/v5
 github.com/jackc/pgx/v5/internal/iobufpool
@@ -424,19 +625,13 @@ github.com/json-iterator/go
 # github.com/k3a/html2text v1.2.1
 ## explicit; go 1.16
 github.com/k3a/html2text
-# github.com/klauspost/compress v1.17.11
-## explicit; go 1.21
-github.com/klauspost/compress
-github.com/klauspost/compress/fse
-github.com/klauspost/compress/huff0
-github.com/klauspost/compress/internal/cpuinfo
+# github.com/klauspost/compress v1.18.0
+## explicit; go 1.22
+github.com/klauspost/compress/internal/le
 github.com/klauspost/compress/internal/race
-github.com/klauspost/compress/internal/snapref
 github.com/klauspost/compress/s2
-github.com/klauspost/compress/zstd
-github.com/klauspost/compress/zstd/internal/xxhash
-# github.com/klauspost/cpuid/v2 v2.2.9
-## explicit; go 1.20
+# github.com/klauspost/cpuid/v2 v2.2.10
+## explicit; go 1.22
 github.com/klauspost/cpuid/v2
 # github.com/kr/pretty v0.3.1
 ## explicit; go 1.12
@@ -448,9 +643,6 @@ github.com/kr/text
 ## explicit; go 1.18
 github.com/leodido/go-urn
 github.com/leodido/go-urn/scim/schema
-# github.com/magiconair/properties v1.8.7
-## explicit; go 1.19
-github.com/magiconair/properties
 # github.com/mailru/easyjson v0.7.7
 ## explicit; go 1.12
 github.com/mailru/easyjson/buffer
@@ -463,14 +655,17 @@ github.com/mattn/go-isatty
 ## explicit; go 1.19
 github.com/microcosm-cc/bluemonday
 github.com/microcosm-cc/bluemonday/css
-# github.com/miekg/dns v1.1.63
-## explicit; go 1.19
+# github.com/miekg/dns v1.1.65
+## explicit; go 1.22.0
 github.com/miekg/dns
+# github.com/minio/crc64nvme v1.0.1
+## explicit; go 1.22
+github.com/minio/crc64nvme
 # github.com/minio/md5-simd v1.1.2
 ## explicit; go 1.14
 github.com/minio/md5-simd
-# github.com/minio/minio-go/v7 v7.0.85
-## explicit; go 1.22
+# github.com/minio/minio-go/v7 v7.0.89
+## explicit; go 1.23.0
 github.com/minio/minio-go/v7
 github.com/minio/minio-go/v7/pkg/cors
 github.com/minio/minio-go/v7/pkg/credentials
@@ -501,7 +696,7 @@ github.com/modern-go/reflect2
 # github.com/munnerz/goautoneg v0.0.0-20191010083416-a7dc8b61c822
 ## explicit
 github.com/munnerz/goautoneg
-# github.com/ncruces/go-sqlite3 v0.24.0
+# github.com/ncruces/go-sqlite3 v0.25.0
 ## explicit; go 1.23.0
 github.com/ncruces/go-sqlite3
 github.com/ncruces/go-sqlite3/driver
@@ -509,7 +704,6 @@ github.com/ncruces/go-sqlite3/embed
 github.com/ncruces/go-sqlite3/internal/alloc
 github.com/ncruces/go-sqlite3/internal/dotlk
 github.com/ncruces/go-sqlite3/internal/util
-github.com/ncruces/go-sqlite3/util/osutil
 github.com/ncruces/go-sqlite3/util/sql3util
 github.com/ncruces/go-sqlite3/vfs
 github.com/ncruces/go-sqlite3/vfs/memdb
@@ -538,17 +732,24 @@ github.com/pkg/errors
 # github.com/pmezard/go-difflib v1.0.1-0.20181226105442-5d4384ee4fb2
 ## explicit
 github.com/pmezard/go-difflib/difflib
-# github.com/prometheus/client_golang v1.20.5
-## explicit; go 1.20
+# github.com/pquerna/otp v1.4.0
+## explicit; go 1.12
+github.com/pquerna/otp
+github.com/pquerna/otp/hotp
+github.com/pquerna/otp/internal
+github.com/pquerna/otp/totp
+# github.com/prometheus/client_golang v1.22.0
+## explicit; go 1.22
 github.com/prometheus/client_golang/internal/github.com/golang/gddo/httputil
 github.com/prometheus/client_golang/internal/github.com/golang/gddo/httputil/header
 github.com/prometheus/client_golang/prometheus
 github.com/prometheus/client_golang/prometheus/internal
 github.com/prometheus/client_golang/prometheus/promhttp
+github.com/prometheus/client_golang/prometheus/promhttp/internal
 # github.com/prometheus/client_model v0.6.1
 ## explicit; go 1.19
 github.com/prometheus/client_model/go
-# github.com/prometheus/common v0.61.0
+# github.com/prometheus/common v0.62.0
 ## explicit; go 1.21
 github.com/prometheus/common/expfmt
 github.com/prometheus/common/model
@@ -575,12 +776,9 @@ github.com/rogpeppe/go-internal/fmtsort
 # github.com/rs/xid v1.6.0
 ## explicit; go 1.16
 github.com/rs/xid
-# github.com/sagikazarmark/locafero v0.4.0
-## explicit; go 1.20
+# github.com/sagikazarmark/locafero v0.7.0
+## explicit; go 1.21
 github.com/sagikazarmark/locafero
-# github.com/sagikazarmark/slog-shim v0.1.0
-## explicit; go 1.20
-github.com/sagikazarmark/slog-shim
 # github.com/shopspring/decimal v1.3.1
 ## explicit; go 1.13
 github.com/shopspring/decimal
@@ -590,12 +788,12 @@ github.com/sourcegraph/conc
 github.com/sourcegraph/conc/internal/multierror
 github.com/sourcegraph/conc/iter
 github.com/sourcegraph/conc/panics
-# github.com/spf13/afero v1.11.0
-## explicit; go 1.19
+# github.com/spf13/afero v1.12.0
+## explicit; go 1.21
 github.com/spf13/afero
 github.com/spf13/afero/internal/common
 github.com/spf13/afero/mem
-# github.com/spf13/cast v1.6.0
+# github.com/spf13/cast v1.7.1
 ## explicit; go 1.19
 github.com/spf13/cast
 # github.com/spf13/cobra v1.9.1
@@ -604,14 +802,10 @@ github.com/spf13/cobra
 # github.com/spf13/pflag v1.0.6
 ## explicit; go 1.12
 github.com/spf13/pflag
-# github.com/spf13/viper v1.19.0
-## explicit; go 1.20
+# github.com/spf13/viper v1.20.1
+## explicit; go 1.21.0
 github.com/spf13/viper
-github.com/spf13/viper/internal/encoding
 github.com/spf13/viper/internal/encoding/dotenv
-github.com/spf13/viper/internal/encoding/hcl
-github.com/spf13/viper/internal/encoding/ini
-github.com/spf13/viper/internal/encoding/javaproperties
 github.com/spf13/viper/internal/encoding/json
 github.com/spf13/viper/internal/encoding/toml
 github.com/spf13/viper/internal/encoding/yaml
@@ -625,207 +819,11 @@ github.com/stretchr/testify/suite
 # github.com/subosito/gotenv v1.6.0
 ## explicit; go 1.18
 github.com/subosito/gotenv
-# github.com/superseriousbusiness/activity v1.11.0-gts
-## explicit; go 1.21
-github.com/superseriousbusiness/activity/pub
-github.com/superseriousbusiness/activity/streams
-github.com/superseriousbusiness/activity/streams/impl/activitystreams/property_accuracy
-github.com/superseriousbusiness/activity/streams/impl/activitystreams/property_actor
-github.com/superseriousbusiness/activity/streams/impl/activitystreams/property_alsoknownas
-github.com/superseriousbusiness/activity/streams/impl/activitystreams/property_altitude
-github.com/superseriousbusiness/activity/streams/impl/activitystreams/property_anyof
-github.com/superseriousbusiness/activity/streams/impl/activitystreams/property_attachment
-github.com/superseriousbusiness/activity/streams/impl/activitystreams/property_attributedto
-github.com/superseriousbusiness/activity/streams/impl/activitystreams/property_audience
-github.com/superseriousbusiness/activity/streams/impl/activitystreams/property_bcc
-github.com/superseriousbusiness/activity/streams/impl/activitystreams/property_bto
-github.com/superseriousbusiness/activity/streams/impl/activitystreams/property_cc
-github.com/superseriousbusiness/activity/streams/impl/activitystreams/property_closed
-github.com/superseriousbusiness/activity/streams/impl/activitystreams/property_content
-github.com/superseriousbusiness/activity/streams/impl/activitystreams/property_context
-github.com/superseriousbusiness/activity/streams/impl/activitystreams/property_current
-github.com/superseriousbusiness/activity/streams/impl/activitystreams/property_deleted
-github.com/superseriousbusiness/activity/streams/impl/activitystreams/property_describes
-github.com/superseriousbusiness/activity/streams/impl/activitystreams/property_duration
-github.com/superseriousbusiness/activity/streams/impl/activitystreams/property_endpoints
-github.com/superseriousbusiness/activity/streams/impl/activitystreams/property_endtime
-github.com/superseriousbusiness/activity/streams/impl/activitystreams/property_first
-github.com/superseriousbusiness/activity/streams/impl/activitystreams/property_followers
-github.com/superseriousbusiness/activity/streams/impl/activitystreams/property_following
-github.com/superseriousbusiness/activity/streams/impl/activitystreams/property_formertype
-github.com/superseriousbusiness/activity/streams/impl/activitystreams/property_generator
-github.com/superseriousbusiness/activity/streams/impl/activitystreams/property_height
-github.com/superseriousbusiness/activity/streams/impl/activitystreams/property_href
-github.com/superseriousbusiness/activity/streams/impl/activitystreams/property_hreflang
-github.com/superseriousbusiness/activity/streams/impl/activitystreams/property_icon
-github.com/superseriousbusiness/activity/streams/impl/activitystreams/property_image
-github.com/superseriousbusiness/activity/streams/impl/activitystreams/property_inbox
-github.com/superseriousbusiness/activity/streams/impl/activitystreams/property_inreplyto
-github.com/superseriousbusiness/activity/streams/impl/activitystreams/property_instrument
-github.com/superseriousbusiness/activity/streams/impl/activitystreams/property_items
-github.com/superseriousbusiness/activity/streams/impl/activitystreams/property_last
-github.com/superseriousbusiness/activity/streams/impl/activitystreams/property_latitude
-github.com/superseriousbusiness/activity/streams/impl/activitystreams/property_liked
-github.com/superseriousbusiness/activity/streams/impl/activitystreams/property_likes
-github.com/superseriousbusiness/activity/streams/impl/activitystreams/property_location
-github.com/superseriousbusiness/activity/streams/impl/activitystreams/property_longitude
-github.com/superseriousbusiness/activity/streams/impl/activitystreams/property_manuallyapprovesfollowers
-github.com/superseriousbusiness/activity/streams/impl/activitystreams/property_mediatype
-github.com/superseriousbusiness/activity/streams/impl/activitystreams/property_movedto
-github.com/superseriousbusiness/activity/streams/impl/activitystreams/property_name
-github.com/superseriousbusiness/activity/streams/impl/activitystreams/property_next
-github.com/superseriousbusiness/activity/streams/impl/activitystreams/property_object
-github.com/superseriousbusiness/activity/streams/impl/activitystreams/property_oneof
-github.com/superseriousbusiness/activity/streams/impl/activitystreams/property_ordereditems
-github.com/superseriousbusiness/activity/streams/impl/activitystreams/property_origin
-github.com/superseriousbusiness/activity/streams/impl/activitystreams/property_outbox
-github.com/superseriousbusiness/activity/streams/impl/activitystreams/property_partof
-github.com/superseriousbusiness/activity/streams/impl/activitystreams/property_preferredusername
-github.com/superseriousbusiness/activity/streams/impl/activitystreams/property_prev
-github.com/superseriousbusiness/activity/streams/impl/activitystreams/property_preview
-github.com/superseriousbusiness/activity/streams/impl/activitystreams/property_published
-github.com/superseriousbusiness/activity/streams/impl/activitystreams/property_radius
-github.com/superseriousbusiness/activity/streams/impl/activitystreams/property_rel
-github.com/superseriousbusiness/activity/streams/impl/activitystreams/property_relationship
-github.com/superseriousbusiness/activity/streams/impl/activitystreams/property_replies
-github.com/superseriousbusiness/activity/streams/impl/activitystreams/property_result
-github.com/superseriousbusiness/activity/streams/impl/activitystreams/property_sensitive
-github.com/superseriousbusiness/activity/streams/impl/activitystreams/property_sharedinbox
-github.com/superseriousbusiness/activity/streams/impl/activitystreams/property_shares
-github.com/superseriousbusiness/activity/streams/impl/activitystreams/property_source
-github.com/superseriousbusiness/activity/streams/impl/activitystreams/property_startindex
-github.com/superseriousbusiness/activity/streams/impl/activitystreams/property_starttime
-github.com/superseriousbusiness/activity/streams/impl/activitystreams/property_streams
-github.com/superseriousbusiness/activity/streams/impl/activitystreams/property_subject
-github.com/superseriousbusiness/activity/streams/impl/activitystreams/property_summary
-github.com/superseriousbusiness/activity/streams/impl/activitystreams/property_tag
-github.com/superseriousbusiness/activity/streams/impl/activitystreams/property_target
-github.com/superseriousbusiness/activity/streams/impl/activitystreams/property_to
-github.com/superseriousbusiness/activity/streams/impl/activitystreams/property_totalitems
-github.com/superseriousbusiness/activity/streams/impl/activitystreams/property_units
-github.com/superseriousbusiness/activity/streams/impl/activitystreams/property_updated
-github.com/superseriousbusiness/activity/streams/impl/activitystreams/property_url
-github.com/superseriousbusiness/activity/streams/impl/activitystreams/property_width
-github.com/superseriousbusiness/activity/streams/impl/activitystreams/type_accept
-github.com/superseriousbusiness/activity/streams/impl/activitystreams/type_activity
-github.com/superseriousbusiness/activity/streams/impl/activitystreams/type_add
-github.com/superseriousbusiness/activity/streams/impl/activitystreams/type_announce
-github.com/superseriousbusiness/activity/streams/impl/activitystreams/type_application
-github.com/superseriousbusiness/activity/streams/impl/activitystreams/type_arrive
-github.com/superseriousbusiness/activity/streams/impl/activitystreams/type_article
-github.com/superseriousbusiness/activity/streams/impl/activitystreams/type_audio
-github.com/superseriousbusiness/activity/streams/impl/activitystreams/type_block
-github.com/superseriousbusiness/activity/streams/impl/activitystreams/type_collection
-github.com/superseriousbusiness/activity/streams/impl/activitystreams/type_collectionpage
-github.com/superseriousbusiness/activity/streams/impl/activitystreams/type_create
-github.com/superseriousbusiness/activity/streams/impl/activitystreams/type_delete
-github.com/superseriousbusiness/activity/streams/impl/activitystreams/type_dislike
-github.com/superseriousbusiness/activity/streams/impl/activitystreams/type_document
-github.com/superseriousbusiness/activity/streams/impl/activitystreams/type_endpoints
-github.com/superseriousbusiness/activity/streams/impl/activitystreams/type_event
-github.com/superseriousbusiness/activity/streams/impl/activitystreams/type_flag
-github.com/superseriousbusiness/activity/streams/impl/activitystreams/type_follow
-github.com/superseriousbusiness/activity/streams/impl/activitystreams/type_group
-github.com/superseriousbusiness/activity/streams/impl/activitystreams/type_ignore
-github.com/superseriousbusiness/activity/streams/impl/activitystreams/type_image
-github.com/superseriousbusiness/activity/streams/impl/activitystreams/type_intransitiveactivity
-github.com/superseriousbusiness/activity/streams/impl/activitystreams/type_invite
-github.com/superseriousbusiness/activity/streams/impl/activitystreams/type_join
-github.com/superseriousbusiness/activity/streams/impl/activitystreams/type_leave
-github.com/superseriousbusiness/activity/streams/impl/activitystreams/type_like
-github.com/superseriousbusiness/activity/streams/impl/activitystreams/type_link
-github.com/superseriousbusiness/activity/streams/impl/activitystreams/type_listen
-github.com/superseriousbusiness/activity/streams/impl/activitystreams/type_mention
-github.com/superseriousbusiness/activity/streams/impl/activitystreams/type_move
-github.com/superseriousbusiness/activity/streams/impl/activitystreams/type_note
-github.com/superseriousbusiness/activity/streams/impl/activitystreams/type_object
-github.com/superseriousbusiness/activity/streams/impl/activitystreams/type_offer
-github.com/superseriousbusiness/activity/streams/impl/activitystreams/type_orderedcollection
-github.com/superseriousbusiness/activity/streams/impl/activitystreams/type_orderedcollectionpage
-github.com/superseriousbusiness/activity/streams/impl/activitystreams/type_organization
-github.com/superseriousbusiness/activity/streams/impl/activitystreams/type_page
-github.com/superseriousbusiness/activity/streams/impl/activitystreams/type_person
-github.com/superseriousbusiness/activity/streams/impl/activitystreams/type_place
-github.com/superseriousbusiness/activity/streams/impl/activitystreams/type_profile
-github.com/superseriousbusiness/activity/streams/impl/activitystreams/type_question
-github.com/superseriousbusiness/activity/streams/impl/activitystreams/type_read
-github.com/superseriousbusiness/activity/streams/impl/activitystreams/type_reject
-github.com/superseriousbusiness/activity/streams/impl/activitystreams/type_relationship
-github.com/superseriousbusiness/activity/streams/impl/activitystreams/type_remove
-github.com/superseriousbusiness/activity/streams/impl/activitystreams/type_service
-github.com/superseriousbusiness/activity/streams/impl/activitystreams/type_tentativeaccept
-github.com/superseriousbusiness/activity/streams/impl/activitystreams/type_tentativereject
-github.com/superseriousbusiness/activity/streams/impl/activitystreams/type_tombstone
-github.com/superseriousbusiness/activity/streams/impl/activitystreams/type_travel
-github.com/superseriousbusiness/activity/streams/impl/activitystreams/type_undo
-github.com/superseriousbusiness/activity/streams/impl/activitystreams/type_update
-github.com/superseriousbusiness/activity/streams/impl/activitystreams/type_video
-github.com/superseriousbusiness/activity/streams/impl/activitystreams/type_view
-github.com/superseriousbusiness/activity/streams/impl/gotosocial/property_always
-github.com/superseriousbusiness/activity/streams/impl/gotosocial/property_approvalrequired
-github.com/superseriousbusiness/activity/streams/impl/gotosocial/property_approvedby
-github.com/superseriousbusiness/activity/streams/impl/gotosocial/property_canannounce
-github.com/superseriousbusiness/activity/streams/impl/gotosocial/property_canlike
-github.com/superseriousbusiness/activity/streams/impl/gotosocial/property_canreply
-github.com/superseriousbusiness/activity/streams/impl/gotosocial/property_interactionpolicy
-github.com/superseriousbusiness/activity/streams/impl/gotosocial/type_announceapproval
-github.com/superseriousbusiness/activity/streams/impl/gotosocial/type_canannounce
-github.com/superseriousbusiness/activity/streams/impl/gotosocial/type_canlike
-github.com/superseriousbusiness/activity/streams/impl/gotosocial/type_canreply
-github.com/superseriousbusiness/activity/streams/impl/gotosocial/type_interactionpolicy
-github.com/superseriousbusiness/activity/streams/impl/gotosocial/type_likeapproval
-github.com/superseriousbusiness/activity/streams/impl/gotosocial/type_replyapproval
-github.com/superseriousbusiness/activity/streams/impl/jsonld/property_id
-github.com/superseriousbusiness/activity/streams/impl/jsonld/property_type
-github.com/superseriousbusiness/activity/streams/impl/schema/property_value
-github.com/superseriousbusiness/activity/streams/impl/schema/type_propertyvalue
-github.com/superseriousbusiness/activity/streams/impl/toot/property_blurhash
-github.com/superseriousbusiness/activity/streams/impl/toot/property_discoverable
-github.com/superseriousbusiness/activity/streams/impl/toot/property_featured
-github.com/superseriousbusiness/activity/streams/impl/toot/property_signaturealgorithm
-github.com/superseriousbusiness/activity/streams/impl/toot/property_signaturevalue
-github.com/superseriousbusiness/activity/streams/impl/toot/property_voterscount
-github.com/superseriousbusiness/activity/streams/impl/toot/type_emoji
-github.com/superseriousbusiness/activity/streams/impl/toot/type_hashtag
-github.com/superseriousbusiness/activity/streams/impl/toot/type_identityproof
-github.com/superseriousbusiness/activity/streams/impl/w3idsecurityv1/property_owner
-github.com/superseriousbusiness/activity/streams/impl/w3idsecurityv1/property_publickey
-github.com/superseriousbusiness/activity/streams/impl/w3idsecurityv1/property_publickeypem
-github.com/superseriousbusiness/activity/streams/impl/w3idsecurityv1/type_publickey
-github.com/superseriousbusiness/activity/streams/values/anyURI
-github.com/superseriousbusiness/activity/streams/values/bcp47
-github.com/superseriousbusiness/activity/streams/values/boolean
-github.com/superseriousbusiness/activity/streams/values/dateTime
-github.com/superseriousbusiness/activity/streams/values/duration
-github.com/superseriousbusiness/activity/streams/values/float
-github.com/superseriousbusiness/activity/streams/values/langString
-github.com/superseriousbusiness/activity/streams/values/nonNegativeInteger
-github.com/superseriousbusiness/activity/streams/values/rfc2045
-github.com/superseriousbusiness/activity/streams/values/rfc5988
-github.com/superseriousbusiness/activity/streams/values/string
-github.com/superseriousbusiness/activity/streams/vocab
-# github.com/superseriousbusiness/go-jpeg-image-structure/v2 v2.0.0-20220321154430-d89a106fdabe
-## explicit; go 1.17
-github.com/superseriousbusiness/go-jpeg-image-structure/v2
-# github.com/superseriousbusiness/go-png-image-structure/v2 v2.0.1-SSB
-## explicit; go 1.12
-github.com/superseriousbusiness/go-png-image-structure/v2
-# github.com/superseriousbusiness/httpsig v1.2.0-SSB
-## explicit; go 1.21
-github.com/superseriousbusiness/httpsig
-# github.com/superseriousbusiness/oauth2/v4 v4.3.2-SSB.0.20230227143000-f4900831d6c8
-## explicit; go 1.13
-github.com/superseriousbusiness/oauth2/v4
-github.com/superseriousbusiness/oauth2/v4/errors
-github.com/superseriousbusiness/oauth2/v4/generates
-github.com/superseriousbusiness/oauth2/v4/manage
-github.com/superseriousbusiness/oauth2/v4/models
-github.com/superseriousbusiness/oauth2/v4/server
-# github.com/tdewolff/minify/v2 v2.21.3
-## explicit; go 1.18
+# github.com/tdewolff/minify/v2 v2.23.1
+## explicit; go 1.18.0
 github.com/tdewolff/minify/v2
 github.com/tdewolff/minify/v2/html
-# github.com/tdewolff/parse/v2 v2.7.19
+# github.com/tdewolff/parse/v2 v2.7.23
 ## explicit; go 1.13
 github.com/tdewolff/parse/v2
 github.com/tdewolff/parse/v2/buffer
@@ -948,8 +946,8 @@ github.com/vmihailenco/tagparser/v2/internal/parser
 # github.com/wagslane/go-password-validator v0.3.0
 ## explicit; go 1.16
 github.com/wagslane/go-password-validator
-# github.com/yuin/goldmark v1.7.8
-## explicit; go 1.19
+# github.com/yuin/goldmark v1.7.10
+## explicit; go 1.22
 github.com/yuin/goldmark
 github.com/yuin/goldmark/ast
 github.com/yuin/goldmark/extension
@@ -959,7 +957,7 @@ github.com/yuin/goldmark/renderer
 github.com/yuin/goldmark/renderer/html
 github.com/yuin/goldmark/text
 github.com/yuin/goldmark/util
-# go.mongodb.org/mongo-driver v1.14.0
+# go.mongodb.org/mongo-driver v1.17.3
 ## explicit; go 1.18
 go.mongodb.org/mongo-driver/bson
 go.mongodb.org/mongo-driver/bson/bsoncodec
@@ -972,7 +970,7 @@ go.mongodb.org/mongo-driver/x/bsonx/bsoncore
 ## explicit; go 1.22.0
 go.opentelemetry.io/auto/sdk
 go.opentelemetry.io/auto/sdk/internal/telemetry
-# go.opentelemetry.io/otel v1.34.0
+# go.opentelemetry.io/otel v1.35.0
 ## explicit; go 1.22.0
 go.opentelemetry.io/otel
 go.opentelemetry.io/otel/attribute
@@ -992,11 +990,11 @@ go.opentelemetry.io/otel/semconv/v1.20.0/httpconv
 go.opentelemetry.io/otel/semconv/v1.24.0
 go.opentelemetry.io/otel/semconv/v1.26.0
 go.opentelemetry.io/otel/semconv/v1.7.0
-# go.opentelemetry.io/otel/exporters/otlp/otlptrace v1.34.0
+# go.opentelemetry.io/otel/exporters/otlp/otlptrace v1.35.0
 ## explicit; go 1.22.0
 go.opentelemetry.io/otel/exporters/otlp/otlptrace
 go.opentelemetry.io/otel/exporters/otlp/otlptrace/internal/tracetransform
-# go.opentelemetry.io/otel/exporters/otlp/otlptrace/otlptracegrpc v1.34.0
+# go.opentelemetry.io/otel/exporters/otlp/otlptrace/otlptracegrpc v1.35.0
 ## explicit; go 1.22.0
 go.opentelemetry.io/otel/exporters/otlp/otlptrace/otlptracegrpc
 go.opentelemetry.io/otel/exporters/otlp/otlptrace/otlptracegrpc/internal
@@ -1013,12 +1011,12 @@ go.opentelemetry.io/otel/exporters/otlp/otlptrace/otlptracehttp/internal/retry
 # go.opentelemetry.io/otel/exporters/prometheus v0.56.0
 ## explicit; go 1.22.0
 go.opentelemetry.io/otel/exporters/prometheus
-# go.opentelemetry.io/otel/metric v1.34.0
+# go.opentelemetry.io/otel/metric v1.35.0
 ## explicit; go 1.22.0
 go.opentelemetry.io/otel/metric
 go.opentelemetry.io/otel/metric/embedded
 go.opentelemetry.io/otel/metric/noop
-# go.opentelemetry.io/otel/sdk v1.34.0
+# go.opentelemetry.io/otel/sdk v1.35.0
 ## explicit; go 1.22.0
 go.opentelemetry.io/otel/sdk
 go.opentelemetry.io/otel/sdk/instrumentation
@@ -1034,10 +1032,11 @@ go.opentelemetry.io/otel/sdk/metric/internal
 go.opentelemetry.io/otel/sdk/metric/internal/aggregate
 go.opentelemetry.io/otel/sdk/metric/internal/x
 go.opentelemetry.io/otel/sdk/metric/metricdata
-# go.opentelemetry.io/otel/trace v1.34.0
+# go.opentelemetry.io/otel/trace v1.35.0
 ## explicit; go 1.22.0
 go.opentelemetry.io/otel/trace
 go.opentelemetry.io/otel/trace/embedded
+go.opentelemetry.io/otel/trace/internal/telemetry
 go.opentelemetry.io/otel/trace/noop
 # go.opentelemetry.io/proto/otlp v1.5.0
 ## explicit; go 1.22.0
@@ -1053,10 +1052,10 @@ go.uber.org/automaxprocs/maxprocs
 # go.uber.org/multierr v1.11.0
 ## explicit; go 1.19
 go.uber.org/multierr
-# golang.org/x/arch v0.13.0
-## explicit; go 1.18
+# golang.org/x/arch v0.16.0
+## explicit; go 1.23.0
 golang.org/x/arch/x86/x86asm
-# golang.org/x/crypto v0.36.0
+# golang.org/x/crypto v0.37.0
 ## explicit; go 1.23.0
 golang.org/x/crypto/acme
 golang.org/x/crypto/acme/autocert
@@ -1077,26 +1076,22 @@ golang.org/x/crypto/scrypt
 golang.org/x/crypto/sha3
 golang.org/x/crypto/ssh
 golang.org/x/crypto/ssh/internal/bcrypt_pbkdf
-# golang.org/x/exp v0.0.0-20240222234643-814bf88cf225
-## explicit; go 1.20
+# golang.org/x/exp v0.0.0-20250305212735-054e65f0b394
+## explicit; go 1.23.0
 golang.org/x/exp/constraints
-golang.org/x/exp/slices
-golang.org/x/exp/slog
-golang.org/x/exp/slog/internal
-golang.org/x/exp/slog/internal/buffer
 # golang.org/x/image v0.24.0
 ## explicit; go 1.18
 golang.org/x/image/riff
 golang.org/x/image/vp8
 golang.org/x/image/vp8l
 golang.org/x/image/webp
-# golang.org/x/mod v0.22.0
-## explicit; go 1.22.0
+# golang.org/x/mod v0.24.0
+## explicit; go 1.23.0
 golang.org/x/mod/internal/lazyregexp
 golang.org/x/mod/module
 golang.org/x/mod/semver
-# golang.org/x/net v0.35.0
-## explicit; go 1.18
+# golang.org/x/net v0.39.0
+## explicit; go 1.23.0
 golang.org/x/net/bpf
 golang.org/x/net/context
 golang.org/x/net/html
@@ -1114,21 +1109,21 @@ golang.org/x/net/ipv4
 golang.org/x/net/ipv6
 golang.org/x/net/publicsuffix
 golang.org/x/net/trace
-# golang.org/x/oauth2 v0.27.0
+# golang.org/x/oauth2 v0.29.0
 ## explicit; go 1.23.0
 golang.org/x/oauth2
 golang.org/x/oauth2/internal
-# golang.org/x/sync v0.12.0
+# golang.org/x/sync v0.13.0
 ## explicit; go 1.23.0
 golang.org/x/sync/errgroup
 golang.org/x/sync/semaphore
-# golang.org/x/sys v0.31.0
+# golang.org/x/sys v0.32.0
 ## explicit; go 1.23.0
 golang.org/x/sys/cpu
 golang.org/x/sys/unix
 golang.org/x/sys/windows
 golang.org/x/sys/windows/registry
-# golang.org/x/text v0.23.0
+# golang.org/x/text v0.24.0
 ## explicit; go 1.23.0
 golang.org/x/text/cases
 golang.org/x/text/encoding
@@ -1150,8 +1145,8 @@ golang.org/x/text/transform
 golang.org/x/text/unicode/bidi
 golang.org/x/text/unicode/norm
 golang.org/x/text/width
-# golang.org/x/tools v0.28.0
-## explicit; go 1.22.0
+# golang.org/x/tools v0.31.0
+## explicit; go 1.23.0
 golang.org/x/tools/go/ast/astutil
 golang.org/x/tools/go/gcexportdata
 golang.org/x/tools/go/packages
@@ -1174,20 +1169,21 @@ golang.org/x/tools/internal/stdlib
 golang.org/x/tools/internal/typeparams
 golang.org/x/tools/internal/typesinternal
 golang.org/x/tools/internal/versions
-# google.golang.org/genproto/googleapis/api v0.0.0-20250115164207-1a7da9e5054f
+# google.golang.org/genproto/googleapis/api v0.0.0-20250218202821-56aae31c358a
 ## explicit; go 1.22
 google.golang.org/genproto/googleapis/api/httpbody
-# google.golang.org/genproto/googleapis/rpc v0.0.0-20250115164207-1a7da9e5054f
+# google.golang.org/genproto/googleapis/rpc v0.0.0-20250218202821-56aae31c358a
 ## explicit; go 1.22
 google.golang.org/genproto/googleapis/rpc/errdetails
 google.golang.org/genproto/googleapis/rpc/status
-# google.golang.org/grpc v1.69.4
-## explicit; go 1.22
+# google.golang.org/grpc v1.71.0
+## explicit; go 1.22.0
 google.golang.org/grpc
 google.golang.org/grpc/attributes
 google.golang.org/grpc/backoff
 google.golang.org/grpc/balancer
 google.golang.org/grpc/balancer/base
+google.golang.org/grpc/balancer/endpointsharding
 google.golang.org/grpc/balancer/grpclb/state
 google.golang.org/grpc/balancer/pickfirst
 google.golang.org/grpc/balancer/pickfirst/internal
@@ -1221,7 +1217,9 @@ google.golang.org/grpc/internal/grpcutil
 google.golang.org/grpc/internal/idle
 google.golang.org/grpc/internal/metadata
 google.golang.org/grpc/internal/pretty
+google.golang.org/grpc/internal/proxyattributes
 google.golang.org/grpc/internal/resolver
+google.golang.org/grpc/internal/resolver/delegatingresolver
 google.golang.org/grpc/internal/resolver/dns
 google.golang.org/grpc/internal/resolver/dns/internal
 google.golang.org/grpc/internal/resolver/passthrough
@@ -1242,8 +1240,8 @@ google.golang.org/grpc/serviceconfig
 google.golang.org/grpc/stats
 google.golang.org/grpc/status
 google.golang.org/grpc/tap
-# google.golang.org/protobuf v1.36.3
-## explicit; go 1.21
+# google.golang.org/protobuf v1.36.6
+## explicit; go 1.22
 google.golang.org/protobuf/encoding/protodelim
 google.golang.org/protobuf/encoding/protojson
 google.golang.org/protobuf/encoding/prototext
@@ -1281,9 +1279,6 @@ google.golang.org/protobuf/types/known/fieldmaskpb
 google.golang.org/protobuf/types/known/structpb
 google.golang.org/protobuf/types/known/timestamppb
 google.golang.org/protobuf/types/known/wrapperspb
-# gopkg.in/ini.v1 v1.67.0
-## explicit
-gopkg.in/ini.v1
 # gopkg.in/mcuadros/go-syslog.v2 v2.3.0
 ## explicit
 gopkg.in/mcuadros/go-syslog.v2
@@ -1297,8 +1292,8 @@ gopkg.in/yaml.v2
 # gopkg.in/yaml.v3 v3.0.1
 ## explicit
 gopkg.in/yaml.v3
-# modernc.org/libc v1.61.13
-## explicit; go 1.21
+# modernc.org/libc v1.62.1
+## explicit; go 1.23.0
 modernc.org/libc
 modernc.org/libc/errno
 modernc.org/libc/fcntl
@@ -1328,15 +1323,15 @@ modernc.org/libc/wctype
 # modernc.org/mathutil v1.7.1
 ## explicit; go 1.21
 modernc.org/mathutil
-# modernc.org/memory v1.8.2
-## explicit; go 1.21
+# modernc.org/memory v1.9.1
+## explicit; go 1.23.0
 modernc.org/memory
-# modernc.org/sqlite v0.0.0-00010101000000-000000000000 => gitlab.com/NyaaaWhatsUpDoc/sqlite v1.35.0-concurrency-workaround
-## explicit; go 1.21
+# modernc.org/sqlite v0.0.0-00010101000000-000000000000 => gitlab.com/NyaaaWhatsUpDoc/sqlite v1.37.0-concurrency-workaround
+## explicit; go 1.23.0
 modernc.org/sqlite
 modernc.org/sqlite/lib
 # mvdan.cc/xurls/v2 v2.6.0
 ## explicit; go 1.22.0
 mvdan.cc/xurls/v2
-# github.com/go-swagger/go-swagger => github.com/superseriousbusiness/go-swagger v0.31.0-gts-go1.23-fix
-# modernc.org/sqlite => gitlab.com/NyaaaWhatsUpDoc/sqlite v1.35.0-concurrency-workaround
+# github.com/go-swagger/go-swagger => codeberg.org/superseriousbusiness/go-swagger v0.31.0-gts-go1.23-fix
+# modernc.org/sqlite => gitlab.com/NyaaaWhatsUpDoc/sqlite v1.37.0-concurrency-workaround

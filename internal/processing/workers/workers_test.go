@@ -21,8 +21,8 @@ import (
 	"context"
 
 	"github.com/stretchr/testify/suite"
+	apiutil "github.com/superseriousbusiness/gotosocial/internal/api/util"
 	"github.com/superseriousbusiness/gotosocial/internal/gtsmodel"
-	"github.com/superseriousbusiness/gotosocial/internal/oauth"
 	"github.com/superseriousbusiness/gotosocial/internal/processing"
 	"github.com/superseriousbusiness/gotosocial/internal/stream"
 	"github.com/superseriousbusiness/gotosocial/testrig"
@@ -39,7 +39,6 @@ type WorkersTestSuite struct {
 
 	// standard suite models
 	testTokens       map[string]*gtsmodel.Token
-	testClients      map[string]*gtsmodel.Client
 	testApplications map[string]*gtsmodel.Application
 	testUsers        map[string]*gtsmodel.User
 	testAccounts     map[string]*gtsmodel.Account
@@ -48,7 +47,7 @@ type WorkersTestSuite struct {
 	testStatuses     map[string]*gtsmodel.Status
 	testTags         map[string]*gtsmodel.Tag
 	testMentions     map[string]*gtsmodel.Mention
-	testAutheds      map[string]*oauth.Auth
+	testAutheds      map[string]*apiutil.Auth
 	testBlocks       map[string]*gtsmodel.Block
 	testActivities   map[string]testrig.ActivityWithSignature
 	testLists        map[string]*gtsmodel.List
@@ -57,7 +56,6 @@ type WorkersTestSuite struct {
 
 func (suite *WorkersTestSuite) SetupSuite() {
 	suite.testTokens = testrig.NewTestTokens()
-	suite.testClients = testrig.NewTestClients()
 	suite.testApplications = testrig.NewTestApplications()
 	suite.testUsers = testrig.NewTestUsers()
 	suite.testAccounts = testrig.NewTestAccounts()
@@ -66,7 +64,7 @@ func (suite *WorkersTestSuite) SetupSuite() {
 	suite.testStatuses = testrig.NewTestStatuses()
 	suite.testTags = testrig.NewTestTags()
 	suite.testMentions = testrig.NewTestMentions()
-	suite.testAutheds = map[string]*oauth.Auth{
+	suite.testAutheds = map[string]*apiutil.Auth{
 		"local_account_1": {
 			Application: suite.testApplications["local_account_1"],
 			User:        suite.testUsers["local_account_1"],

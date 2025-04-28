@@ -18,8 +18,8 @@
 package ap
 
 import (
-	"github.com/superseriousbusiness/activity/streams"
-	"github.com/superseriousbusiness/activity/streams/vocab"
+	"codeberg.org/superseriousbusiness/activity/streams"
+	"codeberg.org/superseriousbusiness/activity/streams/vocab"
 	"github.com/superseriousbusiness/gotosocial/internal/gtserror"
 )
 
@@ -153,7 +153,9 @@ func serializeStatusable(t vocab.Type, includeContext bool) (map[string]interfac
 
 	NormalizeOutgoingAttachmentProp(statusable, data)
 	NormalizeOutgoingContentProp(statusable, data)
-	NormalizeOutgoingInteractionPolicyProp(statusable, data)
+	if ipa, ok := statusable.(InteractionPolicyAware); ok {
+		NormalizeOutgoingInteractionPolicyProp(ipa, data)
+	}
 
 	return data, nil
 }

@@ -31,7 +31,6 @@ import (
 	"testing"
 
 	"github.com/stretchr/testify/suite"
-	"github.com/superseriousbusiness/gotosocial/internal/ap"
 	"github.com/superseriousbusiness/gotosocial/internal/api/client/search"
 	apimodel "github.com/superseriousbusiness/gotosocial/internal/api/model"
 	apiutil "github.com/superseriousbusiness/gotosocial/internal/api/util"
@@ -915,8 +914,8 @@ func (suite *SearchGetTestSuite) TestSearchAAny() {
 		suite.FailNow(err.Error())
 	}
 
-	suite.Len(searchResult.Accounts, 5)
-	suite.Len(searchResult.Statuses, 8)
+	suite.Len(searchResult.Accounts, 6)
+	suite.Len(searchResult.Statuses, 9)
 	suite.Len(searchResult.Hashtags, 0)
 }
 
@@ -959,7 +958,7 @@ func (suite *SearchGetTestSuite) TestSearchAAnyFollowingOnly() {
 	}
 
 	suite.Len(searchResult.Accounts, 2)
-	suite.Len(searchResult.Statuses, 8)
+	suite.Len(searchResult.Statuses, 9)
 	suite.Len(searchResult.Hashtags, 0)
 }
 
@@ -1002,7 +1001,7 @@ func (suite *SearchGetTestSuite) TestSearchAStatuses() {
 	}
 
 	suite.Len(searchResult.Accounts, 0)
-	suite.Len(searchResult.Statuses, 8)
+	suite.Len(searchResult.Statuses, 9)
 	suite.Len(searchResult.Hashtags, 0)
 }
 
@@ -1130,7 +1129,7 @@ func (suite *SearchGetTestSuite) TestSearchAAccounts() {
 		suite.FailNow(err.Error())
 	}
 
-	suite.Len(searchResult.Accounts, 5)
+	suite.Len(searchResult.Accounts, 6)
 	suite.Len(searchResult.Statuses, 0)
 	suite.Len(searchResult.Hashtags, 0)
 }
@@ -1402,7 +1401,7 @@ func (suite *SearchGetTestSuite) TestSearchRemoteInstanceAccountPartial() {
 		FollowersURI:          "http://" + theirDomain + "/users/" + theirDomain + "/followers",
 		FollowingURI:          "http://" + theirDomain + "/users/" + theirDomain + "/following",
 		FeaturedCollectionURI: "http://" + theirDomain + "/users/" + theirDomain + "/collections/featured",
-		ActorType:             ap.ActorPerson,
+		ActorType:             gtsmodel.AccountActorTypePerson,
 		PrivateKey:            key,
 		PublicKey:             &key.PublicKey,
 	}); err != nil {

@@ -26,9 +26,9 @@ import (
 	"net/url"
 	"strings"
 
-	"github.com/superseriousbusiness/activity/pub"
-	"github.com/superseriousbusiness/activity/streams"
-	"github.com/superseriousbusiness/activity/streams/vocab"
+	"codeberg.org/superseriousbusiness/activity/pub"
+	"codeberg.org/superseriousbusiness/activity/streams"
+	"codeberg.org/superseriousbusiness/activity/streams/vocab"
 	"github.com/superseriousbusiness/gotosocial/internal/ap"
 	"github.com/superseriousbusiness/gotosocial/internal/config"
 	"github.com/superseriousbusiness/gotosocial/internal/db"
@@ -36,24 +36,35 @@ import (
 	"github.com/superseriousbusiness/gotosocial/internal/gtsmodel"
 	"github.com/superseriousbusiness/gotosocial/internal/log"
 	"github.com/superseriousbusiness/gotosocial/internal/uris"
-	"github.com/superseriousbusiness/gotosocial/internal/util"
 	"github.com/superseriousbusiness/gotosocial/internal/util/xslices"
 )
 
-// AccountToAS converts a gts model account
-// into an activity streams person or service.
+func accountableForActorType(actorType gtsmodel.AccountActorType) ap.Accountable {
+	switch actorType {
+	case gtsmodel.AccountActorTypeApplication:
+		return streams.NewActivityStreamsApplication()
+	case gtsmodel.AccountActorTypeGroup:
+		return streams.NewActivityStreamsGroup()
+	case gtsmodel.AccountActorTypeOrganization:
+		return streams.NewActivityStreamsOrganization()
+	case gtsmodel.AccountActorTypePerson:
+		return streams.NewActivityStreamsPerson()
+	case gtsmodel.AccountActorTypeService:
+		return streams.NewActivityStreamsService()
+	default:
+		panic("invalid actor type")
+	}
+}
+
+// AccountToAS converts a gts model
+// account into an accountable.
 func (c *Converter) AccountToAS(
 	ctx context.Context,
 	a *gtsmodel.Account,
 ) (ap.Accountable, error) {
-	// accountable is a service if this
-	// is a bot account, otherwise a person.
-	var accountable ap.Accountable
-	if util.PtrOrZero(a.Bot) {
-		accountable = streams.NewActivityStreamsService()
-	} else {
-		accountable = streams.NewActivityStreamsPerson()
-	}
+	// Use appropriate underlying
+	// actor type of accountable.
+	accountable := accountableForActorType(a.ActorType)
 
 	// id should be the activitypub URI of this user
 	// something like https://example.org/users/example_user
@@ -390,14 +401,9 @@ func (c *Converter) AccountToASMinimal(
 	ctx context.Context,
 	a *gtsmodel.Account,
 ) (ap.Accountable, error) {
-	// accountable is a service if this
-	// is a bot account, otherwise a person.
-	var accountable ap.Accountable
-	if util.PtrOrZero(a.Bot) {
-		accountable = streams.NewActivityStreamsService()
-	} else {
-		accountable = streams.NewActivityStreamsPerson()
-	}
+	// Use appropriate underlying
+	// actor type of accountable.
+	accountable := accountableForActorType(a.ActorType)
 
 	// id should be the activitypub URI of this user
 	// something like https://example.org/users/example_user
@@ -705,35 +711,38 @@ func (c *Converter) StatusToAS(ctx context.Context, s *gtsmodel.Status) (ap.Stat
 	status.SetActivityStreamsSensitive(sensitiveProp)
 
 	// interactionPolicy
-	var p *gtsmodel.InteractionPolicy
-	if s.InteractionPolicy != nil {
-		// Use InteractionPolicy
-		// set on the status.
-		p = s.InteractionPolicy
-	} else {
-		// Fall back to default policy
-		// for the status's visibility.
-		p = gtsmodel.DefaultInteractionPolicyFor(s.Visibility)
-	}
-	policy, err := c.InteractionPolicyToASInteractionPolicy(ctx, p, s)
-	if err != nil {
-		return nil, fmt.Errorf("error creating interactionPolicy: %w", err)
-	}
-
-	policyProp := streams.NewGoToSocialInteractionPolicyProperty()
-	policyProp.AppendGoToSocialInteractionPolicy(policy)
-	status.SetGoToSocialInteractionPolicy(policyProp)
-
-	// Parse + set approvedBy.
-	if s.ApprovedByURI != "" {
-		approvedBy, err := url.Parse(s.ApprovedByURI)
+	if ipa, ok := status.(ap.InteractionPolicyAware); ok {
+		var p *gtsmodel.InteractionPolicy
+		if s.InteractionPolicy != nil {
+			// Use InteractionPolicy
+			// set on the status.
+			p = s.InteractionPolicy
+		} else {
+			// Fall back to default policy
+			// for the status's visibility.
+			p = gtsmodel.DefaultInteractionPolicyFor(s.Visibility)
+		}
+		policy, err := c.InteractionPolicyToASInteractionPolicy(ctx, p, s)
 		if err != nil {
-			return nil, fmt.Errorf("error parsing approvedBy: %w", err)
+			return nil, fmt.Errorf("error creating interactionPolicy: %w", err)
 		}
 
-		approvedByProp := streams.NewGoToSocialApprovedByProperty()
-		approvedByProp.Set(approvedBy)
-		status.SetGoToSocialApprovedBy(approvedByProp)
+		// Set interaction policy.
+		policyProp := streams.NewGoToSocialInteractionPolicyProperty()
+		policyProp.AppendGoToSocialInteractionPolicy(policy)
+		ipa.SetGoToSocialInteractionPolicy(policyProp)
+
+		// Parse + set approvedBy.
+		if s.ApprovedByURI != "" {
+			approvedBy, err := url.Parse(s.ApprovedByURI)
+			if err != nil {
+				return nil, fmt.Errorf("error parsing approvedBy: %w", err)
+			}
+
+			approvedByProp := streams.NewGoToSocialApprovedByProperty()
+			approvedByProp.Set(approvedBy)
+			ipa.SetGoToSocialApprovedBy(approvedByProp)
+		}
 	}
 
 	return status, nil

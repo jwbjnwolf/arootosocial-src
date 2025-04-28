@@ -40,6 +40,7 @@ import (
 	"github.com/superseriousbusiness/gotosocial/internal/language"
 	"github.com/superseriousbusiness/gotosocial/internal/log"
 	"github.com/superseriousbusiness/gotosocial/internal/media"
+	"github.com/superseriousbusiness/gotosocial/internal/text"
 	"github.com/superseriousbusiness/gotosocial/internal/uris"
 	"github.com/superseriousbusiness/gotosocial/internal/util"
 )
@@ -98,6 +99,10 @@ func (c *Converter) UserToAPIUser(ctx context.Context, u *gtsmodel.User) *apimod
 		user.ResetPasswordSentAt = util.FormatISO8601(u.ResetPasswordSentAt)
 	}
 
+	if !u.TwoFactorEnabledAt.IsZero() {
+		user.TwoFactorEnabledAt = util.FormatISO8601(u.TwoFactorEnabledAt)
+	}
+
 	return user
 }
 
@@ -134,8 +139,9 @@ func (c *Converter) AccountToAPIAccountSensitive(ctx context.Context, a *gtsmode
 	}
 
 	apiAccount.Source = &apimodel.Source{
-		Privacy:             c.VisToAPIVis(ctx, a.Settings.Privacy),
-		WebVisibility:       c.VisToAPIVis(ctx, a.Settings.WebVisibility),
+		Privacy:             VisToAPIVis(a.Settings.Privacy),
+		WebVisibility:       VisToAPIVis(a.Settings.WebVisibility),
+		WebLayout:           a.Settings.WebLayout.String(),
 		Sensitive:           *a.Settings.Sensitive,
 		Language:            a.Settings.Language,
 		StatusContentType:   statusContentType,
@@ -219,6 +225,14 @@ func (c *Converter) AccountToWebAccount(
 				PreviewMIMEType: ogHeader.Thumbnail.ContentType,
 			}
 		}
+	}
+
+	// Check for presence of settings before
+	// populating settings-specific thingies,
+	// as instance account doesn't store a
+	// settings struct.
+	if a.Settings != nil {
+		webAccount.WebLayout = a.Settings.WebLayout.String()
 	}
 
 	return webAccount, nil
@@ -351,7 +365,6 @@ func (c *Converter) accountToAPIAccountPublic(ctx context.Context, a *gtsmodel.A
 	var (
 		locked       = util.PtrOrValue(a.Locked, true)
 		discoverable = util.PtrOrValue(a.Discoverable, false)
-		bot          = util.PtrOrValue(a.Bot, false)
 	)
 
 	// Remaining properties are simple and
@@ -364,7 +377,7 @@ func (c *Converter) accountToAPIAccountPublic(ctx context.Context, a *gtsmodel.A
 		DisplayName:       a.DisplayName,
 		Locked:            locked,
 		Discoverable:      discoverable,
-		Bot:               bot,
+		Bot:               a.ActorType.IsBot(),
 		CreatedAt:         util.FormatISO8601(a.CreatedAt),
 		Note:              a.Note,
 		URL:               a.URL,
@@ -508,7 +521,7 @@ func (c *Converter) AccountToAPIAccountBlocked(ctx context.Context, a *gtsmodel.
 		ID:        a.ID,
 		Username:  a.Username,
 		Acct:      acct,
-		Bot:       *a.Bot,
+		Bot:       a.ActorType.IsBot(),
 		CreatedAt: util.FormatISO8601(a.CreatedAt),
 		URL:       a.URL,
 		// Empty array (not nillable).
@@ -622,14 +635,22 @@ func (c *Converter) AppToAPIAppSensitive(ctx context.Context, a *gtsmodel.Applic
 		return nil, gtserror.Newf("error getting VAPID public key: %w", err)
 	}
 
+	createdAt, err := id.TimeFromULID(a.ID)
+	if err != nil {
+		return nil, gtserror.Newf("error converting id to time: %w", err)
+	}
+
 	return &apimodel.Application{
 		ID:           a.ID,
+		CreatedAt:    util.FormatISO8601(createdAt),
 		Name:         a.Name,
 		Website:      a.Website,
-		RedirectURI:  a.RedirectURI,
+		RedirectURI:  strings.Join(a.RedirectURIs, "\n"),
+		RedirectURIs: a.RedirectURIs,
 		ClientID:     a.ClientID,
 		ClientSecret: a.ClientSecret,
 		VapidKey:     vapidKeyPair.Public,
+		Scopes:       strings.Split(a.Scopes, " "),
 	}, nil
 }
 
@@ -1123,13 +1144,16 @@ func (c *Converter) StatusToWebStatus(
 	}
 
 	webStatus := &apimodel.WebStatus{
-		Status:  apiStatus,
-		Account: acct,
+		Status:         apiStatus,
+		SpoilerContent: s.ContentWarning,
+		Account:        acct,
 	}
 
 	// Whack a newline before and after each "pre" to make it easier to outdent it.
 	webStatus.Content = strings.ReplaceAll(webStatus.Content, "<pre>", "\n<pre>")
 	webStatus.Content = strings.ReplaceAll(webStatus.Content, "</pre>", "</pre>\n")
+	webStatus.SpoilerContent = strings.ReplaceAll(webStatus.SpoilerContent, "<pre>", "\n<pre>")
+	webStatus.SpoilerContent = strings.ReplaceAll(webStatus.SpoilerContent, "</pre>", "</pre>\n")
 
 	// Add additional information for template.
 	// Assume empty langs, hope for not empty language.
@@ -1193,6 +1217,45 @@ func (c *Converter) StatusToWebStatus(
 	// Mark local.
 	webStatus.Local = *s.Local
 
+	// Get edit history for this
+	// status, if it's been edited.
+	if webStatus.EditedAt != nil {
+		// Make sure edits are populated.
+		if len(s.Edits) != len(s.EditIDs) {
+			s.Edits, err = c.state.DB.GetStatusEditsByIDs(ctx, s.EditIDs)
+			if err != nil && !errors.Is(err, db.ErrNoEntries) {
+				err := gtserror.Newf("db error getting status edits: %w", err)
+				return nil, err
+			}
+		}
+
+		// Include each historical entry
+		// (this includes the created date).
+		for _, edit := range s.Edits {
+			webStatus.EditTimeline = append(
+				webStatus.EditTimeline,
+				util.FormatISO8601(edit.CreatedAt),
+			)
+		}
+
+		// Make sure to include latest revision.
+		webStatus.EditTimeline = append(
+			webStatus.EditTimeline,
+			*webStatus.EditedAt,
+		)
+
+		// Sort the slice so it goes from
+		// newest -> oldest, like a timeline.
+		//
+		// It'll look something like:
+		//
+		//	- edit3 date (ie., latest version)
+		//	- edit2 date (if we have it)
+		//	- edit1 date (if we have it)
+		//	- created date
+		slices.Reverse(webStatus.EditTimeline)
+	}
+
 	// Set additional templating
 	// variables on media attachments.
 
@@ -1215,10 +1278,11 @@ func (c *Converter) StatusToWebStatus(
 	for i, apiAttachment := range apiStatus.MediaAttachments {
 		ogAttachment := ogAttachments[apiAttachment.ID]
 		webStatus.MediaAttachments[i] = &apimodel.WebAttachment{
-			Attachment:      apiAttachment,
-			Sensitive:       apiStatus.Sensitive,
-			MIMEType:        ogAttachment.File.ContentType,
-			PreviewMIMEType: ogAttachment.Thumbnail.ContentType,
+			Attachment:       apiAttachment,
+			Sensitive:        apiStatus.Sensitive,
+			MIMEType:         ogAttachment.File.ContentType,
+			PreviewMIMEType:  ogAttachment.Thumbnail.ContentType,
+			ParentStatusLink: apiStatus.URL,
 		}
 	}
 
@@ -1370,8 +1434,7 @@ func (c *Converter) baseStatusToFrontend(
 		InReplyToID:        nil, // Set below.
 		InReplyToAccountID: nil, // Set below.
 		Sensitive:          *s.Sensitive,
-		SpoilerText:        s.ContentWarning,
-		Visibility:         c.VisToAPIVis(ctx, s.Visibility),
+		Visibility:         VisToAPIVis(s.Visibility),
 		LocalOnly:          s.IsLocalOnly(),
 		Language:           nil, // Set below.
 		URI:                s.URI,
@@ -1389,7 +1452,13 @@ func (c *Converter) baseStatusToFrontend(
 		Emojis:             apiEmojis,
 		Card:               nil, // TODO: implement cards
 		Text:               s.Text,
+		ContentType:        ContentTypeToAPIContentType(s.ContentType),
 		InteractionPolicy:  *apiInteractionPolicy,
+
+		// Mastodon API says spoiler_text should be *text*, not HTML, so
+		// parse any HTML back to plaintext when serializing via the API,
+		// attempting to preserve semantic intent to keep it readable.
+		SpoilerText: text.ParseHTMLToPlain(s.ContentWarning),
 	}
 
 	if at := s.EditedAt; !at.IsZero() {
@@ -1401,14 +1470,28 @@ func (c *Converter) baseStatusToFrontend(
 	apiStatus.InReplyToAccountID = util.PtrIf(s.InReplyToAccountID)
 	apiStatus.Language = util.PtrIf(s.Language)
 
-	if app := s.CreatedWithApplication; app != nil {
-		apiStatus.Application, err = c.AppToAPIAppPublic(ctx, app)
+	switch {
+	case s.CreatedWithApplication != nil:
+		// App exists for this status and is set.
+		apiStatus.Application, err = c.AppToAPIAppPublic(ctx, s.CreatedWithApplication)
 		if err != nil {
 			return nil, gtserror.Newf(
 				"error converting application %s: %w",
 				s.CreatedWithApplicationID, err,
 			)
 		}
+
+	case s.CreatedWithApplicationID != "":
+		// App existed for this status but not
+		// anymore, it's probably been cleaned up.
+		// Set a dummy application.
+		apiStatus.Application = &apimodel.Application{
+			Name: "unknown application",
+		}
+
+	default:
+		// No app stored for this (probably remote)
+		// status, so nothing to do (app is optional).
 	}
 
 	if s.Poll != nil {
@@ -1610,7 +1693,7 @@ func (c *Converter) StatusToAPIEdits(ctx context.Context, status *gtsmodel.Statu
 }
 
 // VisToAPIVis converts a gts visibility into its api equivalent
-func (c *Converter) VisToAPIVis(ctx context.Context, m gtsmodel.Visibility) apimodel.Visibility {
+func VisToAPIVis(m gtsmodel.Visibility) apimodel.Visibility {
 	switch m {
 	case gtsmodel.VisibilityPublic:
 		return apimodel.VisibilityPublic
@@ -1620,6 +1703,19 @@ func (c *Converter) VisToAPIVis(ctx context.Context, m gtsmodel.Visibility) apim
 		return apimodel.VisibilityPrivate
 	case gtsmodel.VisibilityDirect:
 		return apimodel.VisibilityDirect
+	case gtsmodel.VisibilityNone:
+		return apimodel.VisibilityNone
+	}
+	return ""
+}
+
+// Converts a gts status content type into its api equivalent
+func ContentTypeToAPIContentType(m gtsmodel.StatusContentType) apimodel.StatusContentType {
+	switch m {
+	case gtsmodel.StatusContentTypePlain:
+		return apimodel.StatusContentTypePlain
+	case gtsmodel.StatusContentTypeMarkdown:
+		return apimodel.StatusContentTypeMarkdown
 	}
 	return ""
 }
@@ -2130,7 +2226,7 @@ func (c *Converter) DomainPermToAPIDomainPerm(
 	domainPerm := &apimodel.DomainPermission{
 		Domain: apimodel.Domain{
 			Domain:        domain,
-			PublicComment: d.GetPublicComment(),
+			PublicComment: util.Ptr(d.GetPublicComment()),
 		},
 	}
 
@@ -2141,8 +2237,8 @@ func (c *Converter) DomainPermToAPIDomainPerm(
 	}
 
 	domainPerm.ID = d.GetID()
-	domainPerm.Obfuscate = util.PtrOrZero(d.GetObfuscate())
-	domainPerm.PrivateComment = d.GetPrivateComment()
+	domainPerm.Obfuscate = d.GetObfuscate()
+	domainPerm.PrivateComment = util.Ptr(d.GetPrivateComment())
 	domainPerm.SubscriptionID = d.GetSubscriptionID()
 	domainPerm.CreatedBy = d.GetCreatedByAccountID()
 	if createdAt := d.GetCreatedAt(); !createdAt.IsZero() {
@@ -3064,5 +3160,41 @@ func (c *Converter) WebPushSubscriptionToAPIWebPushSubscription(
 		},
 		Policy:   webPushNotificationPolicyToAPIWebPushNotificationPolicy(subscription.Policy),
 		Standard: true,
+	}, nil
+}
+
+func (c *Converter) TokenToAPITokenInfo(
+	ctx context.Context,
+	token *gtsmodel.Token,
+) (*apimodel.TokenInfo, error) {
+	createdAt, err := id.TimeFromULID(token.ID)
+	if err != nil {
+		err := gtserror.Newf("error parsing time from token id: %w", err)
+		return nil, err
+	}
+
+	var lastUsed string
+	if !token.LastUsed.IsZero() {
+		lastUsed = util.FormatISO8601(token.LastUsed)
+	}
+
+	application, err := c.state.DB.GetApplicationByClientID(ctx, token.ClientID)
+	if err != nil {
+		err := gtserror.Newf("db error getting application with client id %s: %w", token.ClientID, err)
+		return nil, err
+	}
+
+	apiApplication, err := c.AppToAPIAppPublic(ctx, application)
+	if err != nil {
+		err := gtserror.Newf("error converting application to api application: %w", err)
+		return nil, err
+	}
+
+	return &apimodel.TokenInfo{
+		ID:          token.ID,
+		CreatedAt:   util.FormatISO8601(createdAt),
+		LastUsed:    lastUsed,
+		Scope:       token.Scope,
+		Application: apiApplication,
 	}, nil
 }

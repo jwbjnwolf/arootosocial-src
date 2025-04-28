@@ -108,7 +108,7 @@ func (suite *StatusMuteTestSuite) TestMuteUnmuteStatus() {
   "muted": true,
   "bookmarked": false,
   "pinned": false,
-  "content": "hello everyone!",
+  "content": "\u003cp\u003ehello everyone!\u003c/p\u003e",
   "reblog": null,
   "application": {
     "name": "really cool gts application",
@@ -149,6 +149,7 @@ func (suite *StatusMuteTestSuite) TestMuteUnmuteStatus() {
   "card": null,
   "poll": null,
   "text": "hello everyone!",
+  "content_type": "text/plain",
   "interaction_policy": {
     "can_favourite": {
       "always": [
@@ -197,7 +198,7 @@ func (suite *StatusMuteTestSuite) TestMuteUnmuteStatus() {
   "muted": false,
   "bookmarked": false,
   "pinned": false,
-  "content": "hello everyone!",
+  "content": "\u003cp\u003ehello everyone!\u003c/p\u003e",
   "reblog": null,
   "application": {
     "name": "really cool gts application",
@@ -238,6 +239,7 @@ func (suite *StatusMuteTestSuite) TestMuteUnmuteStatus() {
   "card": null,
   "poll": null,
   "text": "hello everyone!",
+  "content_type": "text/plain",
   "interaction_policy": {
     "can_favourite": {
       "always": [

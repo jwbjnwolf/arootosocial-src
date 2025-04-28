@@ -158,8 +158,8 @@ func (suite *InstancePatchTestSuite) TestInstancePatch1() {
   },
   "stats": {
     "domain_count": 2,
-    "status_count": 21,
-    "user_count": 4
+    "status_count": 23,
+    "user_count": 5
   },
   "thumbnail": "http://localhost:8080/assets/logo.webp",
   "contact_account": {
@@ -301,8 +301,8 @@ func (suite *InstancePatchTestSuite) TestInstancePatch2() {
   },
   "stats": {
     "domain_count": 2,
-    "status_count": 21,
-    "user_count": 4
+    "status_count": 23,
+    "user_count": 5
   },
   "thumbnail": "http://localhost:8080/assets/logo.webp",
   "contact_account": {
@@ -444,8 +444,8 @@ func (suite *InstancePatchTestSuite) TestInstancePatch3() {
   },
   "stats": {
     "domain_count": 2,
-    "status_count": 21,
-    "user_count": 4
+    "status_count": 23,
+    "user_count": 5
   },
   "thumbnail": "http://localhost:8080/assets/logo.webp",
   "contact_account": {
@@ -544,7 +544,7 @@ func (suite *InstancePatchTestSuite) TestInstancePatch5() {
 	b, err := io.ReadAll(result.Body)
 	suite.NoError(err)
 
-	suite.Equal(`{"error":"Forbidden: user is not an admin so cannot update instance settings"}`, string(b))
+	suite.Equal(`{"error":"Forbidden: token has insufficient scope permission"}`, string(b))
 }
 
 func (suite *InstancePatchTestSuite) TestInstancePatch6() {
@@ -638,8 +638,8 @@ func (suite *InstancePatchTestSuite) TestInstancePatch6() {
   },
   "stats": {
     "domain_count": 2,
-    "status_count": 21,
-    "user_count": 4
+    "status_count": 23,
+    "user_count": 5
   },
   "thumbnail": "http://localhost:8080/assets/logo.webp",
   "contact_account": {
@@ -803,8 +803,8 @@ func (suite *InstancePatchTestSuite) TestInstancePatch8() {
   },
   "stats": {
     "domain_count": 2,
-    "status_count": 21,
-    "user_count": 4
+    "status_count": 23,
+    "user_count": 5
   },
   "thumbnail": "http://localhost:8080/fileserver/01AY6P665V14JJR0AFVRT7311Y/attachment/original/`+instanceAccount.AvatarMediaAttachment.ID+`.gif",`+`
   "thumbnail_type": "image/gif",
@@ -987,8 +987,8 @@ func (suite *InstancePatchTestSuite) TestInstancePatch9() {
   },
   "stats": {
     "domain_count": 2,
-    "status_count": 21,
-    "user_count": 4
+    "status_count": 23,
+    "user_count": 5
   },
   "thumbnail": "http://localhost:8080/assets/logo.webp",
   "contact_account": {

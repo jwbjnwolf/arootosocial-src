@@ -70,7 +70,6 @@ func (c *Caches) Init() {
 	c.initBlock()
 	c.initBlockIDs()
 	c.initBoostOfIDs()
-	c.initClient()
 	c.initConversation()
 	c.initConversationLastStatusIDs()
 	c.initDomainAllow()
@@ -145,8 +144,12 @@ func (c *Caches) Start() error {
 func (c *Caches) Stop() {
 	log.Infof(nil, "stop: %p", c)
 
-	_ = c.Webfinger.Stop()
-	_ = c.StatusesFilterableFields.Stop()
+	if c.Webfinger != nil {
+		_ = c.Webfinger.Stop()
+	}
+	if c.StatusesFilterableFields != nil {
+		_ = c.StatusesFilterableFields.Stop()
+	}
 }
 
 // Sweep will sweep all the available caches to ensure none
@@ -164,7 +167,6 @@ func (c *Caches) Sweep(threshold float64) {
 	c.DB.Block.Trim(threshold)
 	c.DB.BlockIDs.Trim(threshold)
 	c.DB.BoostOfIDs.Trim(threshold)
-	c.DB.Client.Trim(threshold)
 	c.DB.Conversation.Trim(threshold)
 	c.DB.ConversationLastStatusIDs.Trim(threshold)
 	c.DB.Emoji.Trim(threshold)
