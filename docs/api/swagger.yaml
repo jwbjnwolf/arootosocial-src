@@ -11971,10 +11971,10 @@ paths:
                   in: query
                   name: min_id
                   type: string
-                - default: 20
+                - default: 50
                   description: Number of statuses to return.
                   in: query
-                  maximum: 40
+                  maximum: 100
                   minimum: 1
                   name: limit
                   type: integer

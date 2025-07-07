@@ -203,7 +203,7 @@ func (m *Module) SearchGETHandler(c *gin.Context) {
 		return
 	}
 
-	limit, errWithCode := apiutil.ParseLimit(c.Query(apiutil.LimitKey), 20, 40, 1)
+	limit, errWithCode := apiutil.ParseLimit(c.Query(apiutil.LimitKey), 50, 100, 1)
 	if errWithCode != nil {
 		apiutil.ErrorHandler(c, errWithCode, m.processor.InstanceGetV1)
 		return
