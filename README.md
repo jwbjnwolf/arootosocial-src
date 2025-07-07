@@ -5,7 +5,7 @@ Arooooo!!
 ![Confused wolf gif](https://github.com/jwbjnwolf/arootosocial/assets/59905825/f763c01e-0f7c-4dfd-82c9-44bb7ec649fd)
 
 - ArooToSocial: https://github.com/jwbjnwolf/arootosocial,
-- GoToSocial: https://github.com/superseriousbusiness/gotosocial.
+- GoToSocial: https://codeberg.org/superseriousbusiness/gotosocial.
 
 # Changes:
 - Make unlisted posts viewable via link in the web interface, (still hidden from profile view): [27ba6ff7987c3b7cb3823d677afff8a716e928d7](https://github.com/jwbjnwolf/arootosocial-src/commit/27ba6ff7987c3b7cb3823d677afff8a716e928d7).
